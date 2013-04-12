@@ -8,8 +8,9 @@ namespace Darkcore { public class Engine : Object {
     public Gee.ArrayList<EventManager> timed_events; 
     public Gee.ArrayList<EventManager> render_events; 
     public Gee.ArrayList<Texture*> textures; 
-    public Gee.ArrayList<Sprite> sprites;  
-    // public Gee.ArrayList<Sound> sounds;
+    public Gee.ArrayList<Sprite> sprites; 
+    public Gee.ArrayList<int> remove_queue;  
+    public Gee.ArrayList<Sound> sounds;
     public GLuint tids[32];
     public KeyState keys;
     public Sprite player;
@@ -18,13 +19,18 @@ namespace Darkcore { public class Engine : Object {
     public int width;
     public int height;
     public int frames_per_second { get; set; default = 0; }
+    public double camera_x { get; set; default = 0.00; }
+    public double camera_y { get; set; default = 0.00; }
+    public double mouse_x { get; set; default = 0.00; }
+    public double mouse_y { get; set; default = 0.00; }
     public Object gamestate;
     
     public Engine(int width, int height) {
         SDL.init (InitFlag.VIDEO |  InitFlag.AUDIO);
         this.textures = new Gee.ArrayList<Texture>();
         this.sprites = new Gee.ArrayList<Sprite>();
-        //this.sounds = new Gee.ArrayList<Sound>();
+        this.remove_queue = new Gee.ArrayList<int>();
+        this.sounds = new Gee.ArrayList<Sound>();
         this.timed_events = new Gee.ArrayList<Darkcore.EventManager>(); 
         this.render_events = new Gee.ArrayList<Darkcore.EventManager>(); 
         this.keys = new KeyState();
@@ -55,8 +61,20 @@ namespace Darkcore { public class Engine : Object {
         Event event = Event ();
         while (Event.poll (out event) == 1) {
             switch (event.type) {
+            case EventType.MOUSEMOTION:
+                mouse_x = event.motion.x;
+                mouse_y = event.motion.y;
+                break;
             case EventType.QUIT:
                 this.done = true;
+                break;
+            case EventType.MOUSEBUTTONUP:
+                print("up\n");
+                this.on_mouse_event (event.button, false);
+                break;
+            case EventType.MOUSEBUTTONDOWN:
+                print("down\n");
+                this.on_mouse_event (event.button, true);
                 break;
             case EventType.KEYDOWN:
                 this.on_keyboard_event (event.key, true);
@@ -65,6 +83,22 @@ namespace Darkcore { public class Engine : Object {
                 this.on_keyboard_event (event.key, false);
                 break;
             }
+        }
+    }
+    
+    public double get_abs_mouse_x () {
+        return mouse_x + (-1 * camera_x);
+    }
+    
+    public double get_abs_mouse_y () {
+        return (height - mouse_y) - camera_y;
+    }
+
+    public void on_mouse_event (MouseButtonEvent event, bool isdown) {
+        switch (event.button) {
+            case MouseButton.LEFT:
+                this.keys.mouse_left = isdown;
+                break;
         }
     }
 
@@ -90,6 +124,12 @@ namespace Darkcore { public class Engine : Object {
                 break;
             case KeySymbol.s:
                 this.keys.s = isdown;
+                break;
+            case KeySymbol.a:
+                this.keys.a = isdown;
+                break;
+            case KeySymbol.d:
+                this.keys.d = isdown;
                 break;
             case KeySymbol.ESCAPE:
                 this.done = true;
@@ -130,7 +170,7 @@ namespace Darkcore { public class Engine : Object {
         glCullFace(GL_BACK);
         glFrontFace(GL_CCW);
         glEnable(GL_CULL_FACE);
-        glClearColor(0, 0, 0, 0);
+        glClearColor(255, 255, 255, 255);
         glViewport(0, 0, (GL.GLsizei) this.screen.w, (GL.GLsizei) this.screen.h);
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
@@ -141,13 +181,27 @@ namespace Darkcore { public class Engine : Object {
         
     }
     
+    public void add_sprite (ref Sprite item) {
+    	sprites.add (item);
+    }
+    
+    public void remove_sprite (Sprite item) {
+    	print("Pending Delete '%s'\n", item.id);
+    	var item_index = sprites.index_of (item);
+    	
+    	//-- Make sure we only need to remove it once.
+    	if (remove_queue.index_of (item_index) > -1) {
+        	remove_queue.add (sprites.index_of (item));
+    	}
+    }
+    
 
     public void draw () {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         // This is where the camera would translate
-        glTranslated(0, 0, -10);
+        glTranslated(camera_x, camera_y, -10);
         
         /*
         TODO: Add tile based map support
@@ -182,11 +236,23 @@ namespace Darkcore { public class Engine : Object {
         glDisable(GL_TEXTURE_2D);
         */
         
-        foreach (var sprite in this.sprites) {
-            if (sprite.on_render != null) {
-                sprite.fire_render(sprite.on_render, this, sprite);
-            }
-            sprite.render();
+        //
+    	    
+        
+        if (sprites != null && sprites.size > 0) {
+			foreach (var sprite in sprites) {
+		        sprite.on_render();
+		        sprite.render();
+			}
+        }
+        
+        if (remove_queue != null && remove_queue.size > 0) {
+			foreach (var sprite_index in remove_queue) {
+				var item = sprites[sprite_index];
+    			print("Deleted '%s'\n", item.id);
+		        sprites.remove_at(sprite_index);
+			}
+			remove_queue.clear();
         }
         
         // Run Render Events
@@ -212,14 +278,26 @@ namespace Darkcore { public class Engine : Object {
             var new_time = SDL.Timer.get_ticks();
             var time_since_last_frame = new_time - old_time;
             
-            this.process_events ();
+            for (var i = 0; i < 4; i++) {
+                this.process_events ();
 
-            foreach (var sprite in this.sprites) {
-                if (sprite.on_key_press != null) {
-                    sprite.fire_key_press(sprite.on_key_press, this, sprite);
-                }
-            }           
-             
+                foreach (var sprite in this.sprites) {
+                    sprite.on_key_press();
+                }      
+
+                foreach (var mgr in timed_events) {
+                    var current = SDL.Timer.get_ticks();
+                    
+                    if (current - mgr.get_active_time () > mgr.get_timeout ()) {
+                        mgr.call_callback ();
+                        // Remove the event from the stack
+                        timed_events.remove (mgr);
+                    }
+                }    
+                
+                SDL.Timer.delay(1000 / (60 * 6));
+            }
+            
             this.draw ();
             fps++;
             
@@ -227,21 +305,11 @@ namespace Darkcore { public class Engine : Object {
                 
             // If all works well you should get about 30 frames a second
             if (time_since_last_frame > 1000) {
-                //print("FPS: %i\n", fps);
+                print("FPS: %i\n", fps);
                 old_time = new_time;
                 frames_per_second = fps;
                 fps = 0;
-            }
-
-            foreach (var mgr in timed_events) {
-                var current = SDL.Timer.get_ticks();
-                
-                if (current - mgr.get_active_time () > mgr.get_timeout ()) {
-                    mgr.call_callback ();
-                    // Remove the event from the stack
-                    timed_events.remove (mgr);
-                }
-            }  
+            } 
         }  
     }
     
