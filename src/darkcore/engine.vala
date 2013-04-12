@@ -181,7 +181,7 @@ namespace Darkcore { public class Engine : Object {
         
     }
     
-    public void add_sprite (ref Sprite item) {
+    public void add_sprite (Sprite item) {
     	sprites.add (item);
     }
     
