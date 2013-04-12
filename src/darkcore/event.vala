@@ -9,7 +9,7 @@ namespace Darkcore {
 
     public class EventManager {
         private class EventWrapper {
-            public EventCallback evt;
+            public unowned EventCallback evt;
             public uint32 active_time;
             public int? timeout;
         }

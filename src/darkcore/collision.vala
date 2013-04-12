@@ -5,10 +5,10 @@ namespace Darkcore {
             Darkcore.Vector segment_1, Darkcore.Vector segment_2, Darkcore.Vector circle_position
         ) {
             var segment = new Darkcore.Vector.copy (segment_1);
-            segment.sub(segment_2);
+            segment.sub (segment_2);
             
             var point = new Darkcore.Vector.copy (circle_position);
-            point.sub(segment_2);
+            point.sub (segment_2);
             
             // Length
             var segment_length = segment.length();
@@ -28,24 +28,24 @@ namespace Darkcore {
             
             var result = new Darkcore.Vector(2);
             if (projection <= 0) {
-                result.set(0, segment_1[0]);
-                result.set(1, segment_1[1]);
+                result.set (0, segment_1[0]);
+                result.set (1, segment_1[1]);
                 return result;
             }
             
             if (projection >= segment_length) {
-                result.set(0, segment_2[0]);
-                result.set(1, segment_2[1]);
+                result.set (0, segment_2[0]);
+                result.set (1, segment_2[1]);
                 return result;
             }
             
             // Divide against scalar
             var projection_vector = new Darkcore.Vector.copy (segment_unit);
-            projection_vector.scale(projection);
+            projection_vector.scale (projection);
             
             // Closest
-            result.memcpy(projection_vector);
-            result.add(segment_1);
+            result.memcpy (projection_vector);
+            result.add (segment_1);
 
             return result;
         } 
