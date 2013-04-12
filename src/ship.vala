@@ -14,64 +14,12 @@ public class Ship : Darkcore.Sprite {
          
     public Ship (ref Darkcore.Engine engine) {
         base.from_file (engine, "resources/ship.png");
+        this.world = engine;
         this.width = 64.00;
         this.height = 64.00;
         this.x = engine.width/2;
         this.y = engine.height/2;
         rocks=new  ArrayList<Rock> ();
-               
-        this.on_key_press = ((engine, ship) => {
-			var gamestate = (GameState) engine.gamestate;
-			var x = 0;
-            var y = 0;
-            // keyspressed?
-            if (up == "up" && engine.keys.up || up == "w" && engine.keys.w) {
-                y += 4;
-            }
-            if (down == "down" && engine.keys.down || down == "s" && engine.keys.s) {
-                y -= 4;
-            }
-            if (right == "right" && engine.keys.right || right == "d" && engine.keys.w) {
-                x += 4;
-            }
-            if (left == "left" && engine.keys.left || left == "a" && engine.keys.s) {
-                x -= 4;
-            }
-            if ((space == "space" && engine.keys.space)  ) {
-                fired=true;
-                gamestate.fire_score ();
-            }
-            // in screen?
-            if (this.x + x + (width / 2) >= engine.width) {
-                x = 0;
-            }
-            else if (this.x + x - (width / 2) <= 0) {
-                x = 0;
-            }
-            if (this.y + y + (height / 2) >= engine.height) {
-                y = 0;
-            }
-            else if (this.y + y - (height / 2) <= 0) {
-                y = 0;
-            }
-            
-            if (!pause) {          
-            this.x += x;
-            this.y += y;
-            rotation += rot;
-            if (rotation>360) {rotation=0;}
-            richtung=rotation;
-			}
-             
-            foreach (Rock r in rocks){
-						
-				if (has_hit_rock (r) ){
-					dead=true;
-					gamestate.fire_score ();
-				}
-			}
-			 
-        }); 
         
     }
 		
@@ -101,6 +49,60 @@ public class Ship : Darkcore.Sprite {
         
         return hit;
     }
+    
+    
+    public override void on_key_press() {
+		var gamestate = (GameState) world.gamestate;
+		var x = 0;
+        var y = 0;
+        // keyspressed?
+        if (up == "up" && world.keys.up || up == "w" && world.keys.w) {
+            y += 4;
+        }
+        if (down == "down" && world.keys.down || down == "s" && world.keys.s) {
+            y -= 4;
+        }
+        if (right == "right" && world.keys.right || right == "d" && world.keys.w) {
+            x += 4;
+        }
+        if (left == "left" && world.keys.left || left == "a" && world.keys.s) {
+            x -= 4;
+        }
+        if ((space == "space" && world.keys.space)  ) {
+            fired=true;
+            gamestate.fire_score ();
+        }
+        // in screen?
+        if (this.x + x + (width / 2) >= world.width) {
+            x = 0;
+        }
+        else if (this.x + x - (width / 2) <= 0) {
+            x = 0;
+        }
+        if (this.y + y + (height / 2) >= world.height) {
+            y = 0;
+        }
+        else if (this.y + y - (height / 2) <= 0) {
+            y = 0;
+        }
+        
+        if (!pause) {          
+        this.x += x;
+        this.y += y;
+        rotation += rot;
+        if (rotation>360) {rotation=0;}
+        richtung=rotation;
+		}
+         
+        foreach (Rock r in rocks){
+					
+			if (has_hit_rock (r) ){
+				dead=true;
+				gamestate.fire_score ();
+			}
+		}
+    }
+    
     public void add_rock(Rock r){
 		rocks.add(r);
 	}

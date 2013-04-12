@@ -12,35 +12,35 @@ public class Rock : Darkcore.Sprite {
         
         this.width = 64.00;
         this.height = 64.00;
+        this.world = engine;
         this.x = Random.int_range(1000, 90000)/100;;
         this.y = Random.int_range(1000, 90000)/100;
         this.velocity_x = Random.int_range(30, 500)/100;
         this.velocity_y = Random.int_range(30, 500)/100;
+    }
+    
+    public override void on_render () {
+		var half_height = height / 2.00;
+        var half_width = width / 2.00;
+        // test if rock hits the screen border
+        if (y + half_height + velocity_y >= world.height) {
+            velocity_y = -Math.fabs(velocity_y);
+        }
+        if (y - half_height - velocity_y <= 0) {
+            velocity_y = Math.fabs(velocity_y);
+        }
+        if (x + half_width + velocity_x >= world.width) {
+            velocity_x = -Math.fabs(velocity_x);
+        }
+        if (x - half_width - velocity_x <= 0) {
+            velocity_x = Math.fabs(velocity_x);
+        }
+                   
+     
+        x += velocity_x;
+        y += velocity_y;
         
-        this.on_render = (engine, rock) => {
-			var half_height = height / 2.00;
-            var half_width = width / 2.00;
-            // test if rock hits the screen border
-            if (y + half_height + velocity_y >= engine.height) {
-                velocity_y = -Math.fabs(velocity_y);
-            }
-            if (y - half_height - velocity_y <= 0) {
-                velocity_y = Math.fabs(velocity_y);
-            }
-            if (x + half_width + velocity_x >= engine.width) {
-                velocity_x = -Math.fabs(velocity_x);
-            }
-            if (x - half_width - velocity_x <= 0) {
-                velocity_x = Math.fabs(velocity_x);
-            }
-                       
-         
-            x += velocity_x;
-            y += velocity_y;
-            
-            rotation += rot;
-            
-        };
+        rotation += rot;
     }
     
    
