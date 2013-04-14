@@ -11,6 +11,8 @@ public class Ship_ex : Darkcore.Sprite {
         this.height = 64.00;
         this.x = 0;
         this.y = 0;
+        this.velocity_x = Random.int_range(100, 400)/100;
+        this.velocity_y = Random.int_range(100, 400)/100;
         this.world = engine;
 		//this.delay=0;
 		
