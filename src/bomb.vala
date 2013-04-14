@@ -3,6 +3,7 @@ public class Bomb : Darkcore.Sprite {
     public double velocity_x;
     public double velocity_y;
     public bool activ=false;
+    public bool out_of_screen=false;
     public bool explosion=false;
     public ArrayList<Rock> rocks;
     public int rock_index;
@@ -53,23 +54,39 @@ public class Bomb : Darkcore.Sprite {
         // test if bomb is running out of screen ?
         if (y + half_height + velocity_y >= world.height) {
 			activ=false;
-			 world.remove_sprite (this);
-			 print ("Bomb Fell Off Screen\n");
+			out_of_screen=true;
+			this.x = 0;
+			this.y = 0;
+			gamestate.fire_score ();
+			// world.remove_sprite (this);
+			 //print ("Bomb Fell Off Screen\n");
 			}
         else if (y - half_height - velocity_y <= 0) {
 			activ=false;
-			world.remove_sprite (this);
-			 print ("Bomb Fell Off Screen\n");
+			out_of_screen=true;
+			this.x = 0;
+			this.y = 0;
+			gamestate.fire_score ();
+			//world.remove_sprite (this);
+			// print ("Bomb Fell Off Screen\n");
         }
         else if (x + half_width + velocity_x >= world.width) {
 			activ=false;
-			world.remove_sprite (this);
-			 print ("Bomb Fell Off Screen\n");
+			out_of_screen=true;
+			this.x = 0;
+			this.y = 0;
+			gamestate.fire_score ();
+			//world.remove_sprite (this);
+			// print ("Bomb Fell Off Screen\n");
         }
         else if (x - half_width - velocity_x <= 0) {
 			activ=false;
-			world.remove_sprite (this);
-			 print ("Bomb Fell Off Screen\n");
+			out_of_screen=true;
+			this.x = 0;
+			this.y = 0;
+			gamestate.fire_score ();
+			//world.remove_sprite (this);
+			// print ("Bomb Fell Off Screen\n");
         }
         //how many rocks ?
         int rs=rocks.size;

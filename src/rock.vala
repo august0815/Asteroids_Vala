@@ -8,8 +8,8 @@ public class Rock : Darkcore.Sprite {
     public int i;
      
     public Rock (ref Darkcore.Engine engine) {
-        base.from_file (engine, "resources/rock.png");
-        
+        var rock_sprite=engine.add_texture ("resources/rock.png");
+        base.from_texture(engine ,rock_sprite);
         this.width = 64.00;
         this.height = 64.00;
         this.world = engine;

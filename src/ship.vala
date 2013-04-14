@@ -13,7 +13,7 @@ public class Ship : Darkcore.Sprite {
     public bool pause=false;
          
     public Ship (ref Darkcore.Engine engine) {
-        base.from_file (engine, "resources/ship.png");
+		base.from_file(engine ,"resources/ship.png");
         this.world = engine;
         this.width = 64.00;
         this.height = 64.00;
@@ -71,6 +71,7 @@ public class Ship : Darkcore.Sprite {
         if ((space == "space" && world.keys.space)  ) {
             fired=true;
             gamestate.fire_score ();
+            fired=false;
         }
         // in screen?
         if (this.x + x + (width / 2) >= world.width) {
@@ -89,7 +90,7 @@ public class Ship : Darkcore.Sprite {
         if (!pause) {          
         this.x += x;
         this.y += y;
-        rotation += rot;
+        //rotation += rot;
         if (rotation>360) {rotation=0;}
         richtung=rotation;
 		}

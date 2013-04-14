@@ -34,8 +34,16 @@ public class GameDemo : Object {
         int hit=0;
         int level=1;
         ArrayList<Rock> rocks=new  ArrayList<Rock> ();
+        var bomb_fired = new Darkcore.Sound ("resources/bomb_launch.ogg");
+        engine.sounds.add (bomb_fired);
+        var explode = new Darkcore.Sound ("resources/explosion.ogg");
+        engine.sounds.add (explode);
+        var ship_explode = new Darkcore.Sound ("resources/ship_explode.ogg");
+        engine.sounds.add (ship_explode);
 		// Load textures
         engine.add_texture ("resources/font.png");
+        var bg=new Background (ref engine);
+        engine.sprites.add (bg);
         // Add an event to the renderer
         engine.add_event(Darkcore.EventTypes.Render, () => {
             });
@@ -78,26 +86,28 @@ public class GameDemo : Object {
 					// Umrechnung zwischen Grad und Radiant
 					var r = ((ship.richtung + 90) * 3.14) / 180;
 					bombe ++;
-					var aa = Math.cos (r)*10;
-					var ba = Math.sin (r)*10;
+					bomb.velocity_x = Math.cos (r)*10;
+					bomb.velocity_y = Math.sin (r)*10;
 					bomb.x = ship.x;
 					bomb.y = ship.y;
-					bomb.velocity_x = aa;
-					bomb.velocity_y = ba;
 					bomb.activ = true;
 					engine.sprites.add (bomb);
-					state.ship = ship;
+					engine.sounds[0].play ();
 				}
 			}
 			
+			
 			if (ship.dead && !ship.pause) {
 				print ("Ship died\n");
+				engine.sounds[2].play ();
+				 
 				life++;
 				ship.pause = true;
 				ship_ex.x = ship.x;
 				ship_ex.y = ship.y;
 				engine.remove_sprite (ship);
 				engine.sprites.add (ship_ex);
+				//ship_ex.anima_tile (0,3);
 			}
 			
 			if (bomb.explosion) {
@@ -106,6 +116,7 @@ public class GameDemo : Object {
 				print ("Bomb Exploded\n");
 				engine.remove_sprite (bomb);
 				hit++;
+				engine.sounds[1].play ();
 				var index = bomb.rock_index;
 				var r = rocks.get (index);
 				engine.sprites.remove (r);
@@ -114,14 +125,18 @@ public class GameDemo : Object {
 				ship.rocks.remove_at (bomb.rock_index);
 				bomb.explosion=false;
 			}
-				
+			if (bomb.out_of_screen){
+				engine.sprites.remove (bomb);
+				bomb.out_of_screen=false;
+				ship.fired=false;
+				}
 			if (ship_ex.activ && ship.dead) {
 				ship.pause = false;
 				ship.dead = false;
 				ship_ex.activ = false;
 				ship.x = engine.width/2;
 				ship.y = engine.height/2;
-				engine.sprites.add (ship);
+				//engine.sprites.add (ship);
 				engine.sprites.remove (ship_ex);
 			}
 			if (bomb.game_over){

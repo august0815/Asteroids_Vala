@@ -33,4 +33,7 @@ rock.png and ship.png are form : http://www.cs.oberlin.edu/~wexler/cs261Fall09/l
 
 bomb.png is an old sprite i don´t know where from.
 
+Sound : from http://www.freesound.org/
+see Readme at resources
+
 

@@ -30,6 +30,7 @@ FILES = \
     src/bomb.vala \
     src/rock.vala \
     src/game.vala \
+    src/bg.vala \
     src/explosion.vala
 
 ifeq ($(OS),WIN32)
