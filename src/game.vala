@@ -1,34 +1,12 @@
 using GL;
 using Gee;
 
-
-
-public class FPSText : Darkcore.SpriteNS.Text {
-	public int level;
-	public int life;
-	public int bombe;
-	public int hit;
-	
-    public FPSText.from_texture(Darkcore.Engine world, int texture_index, 
-    	ref int level, ref int life, ref int bombe, ref int hit) {
-        base.from_texture(world, texture_index);
-        this.level = level;
-        this.life = life;
-        this.bombe = bombe;
-        this.hit = hit;
-    }
-    
-    public override void on_render () {
-        data = @"Level : $level \n Life lost: $life  Torpedo fired : $bombe   Asteroids hit : $hit\n";
-    }
-}
-
 public class GameDemo : Object {
     
     public GameDemo(){
-        var engine = new Darkcore.Engine(800, 600);
+        var engine = new Darkcore.Engine(1260, 960);
         var state = new GameState();
-        int anzahl=5;
+        int anzahl=2;
         int life=0;
         int bombe=0;
         int hit=0;
@@ -50,7 +28,8 @@ public class GameDemo : Object {
         // display some game variables
         var text = new FPSText.from_texture(engine, 0, ref level, ref life, ref bombe, ref hit);
         text.set_text (""); // Testing
-        text.x = 0;
+        //is this needed??
+        //text.x = 0;//why ??
         engine.sprites.add (text);
         //engine.add_sprite (ref text);
         
@@ -86,6 +65,8 @@ public class GameDemo : Object {
 					// Umrechnung zwischen Grad und Radiant
 					var r = ((ship.richtung + 90) * 3.14) / 180;
 					bombe ++;
+					text.bombe=bombe;
+					text.update();
 					bomb.velocity_x = Math.cos (r)*10;
 					bomb.velocity_y = Math.sin (r)*10;
 					bomb.x = ship.x;
@@ -102,6 +83,8 @@ public class GameDemo : Object {
 				engine.sounds[2].play ();
 				 exp.activ=true;
 				life++;
+				text.life=life;
+				text.update();
 				ship.pause = true;
 				exp.x = ship.x;
 				exp.y = ship.y;
@@ -128,6 +111,8 @@ public class GameDemo : Object {
 				print ("Bomb Exploded\n");
 				engine.remove_sprite (bomb);
 				hit++;
+				text.hit=hit;
+				text.update();
 				engine.sounds[1].play ();
 				var index = bomb.rock_index;
 				var r = rocks.get (index);
@@ -144,9 +129,13 @@ public class GameDemo : Object {
 				}
 			
 			if (bomb.game_over){
-				text.set_text (@"\nG A M E  O V E R : YOU WIN");
+				
+				
 				ship.fired=false;
 				engine.sprites.remove (ship);
+				//engine.sprites.remove (text);
+				text.aktuell="G A M E  O V E R : YOU WIN";
+				//engine.sprites.add (text);
 			}
 		};
         
