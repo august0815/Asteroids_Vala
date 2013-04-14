@@ -36,8 +36,8 @@ namespace Darkcore {
                     
                     // Push the character over to render next to the previous
                     // character
-                    this.x = 230 + (no_of_chars_per_line * i);
-                    this.y = 200; // + (16 * i);
+                    this.x = 5+(no_of_chars_per_line * i);
+                    this.y = 10; // + (16 * i);
                     
                     this.coords_top_left_x = 0.00 + (fw * cx);
                     this.coords_top_left_y = 0.00 + (fw * cy);

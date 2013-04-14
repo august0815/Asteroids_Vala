@@ -6,7 +6,7 @@ public class GameDemo : Object {
     public GameDemo(){
         var engine = new Darkcore.Engine(1260, 960);
         var state = new GameState();
-        int anzahl=2;
+        int anzahl=5;
         int life=0;
         int bombe=0;
         int hit=0;
