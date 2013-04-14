@@ -10,7 +10,7 @@ namespace Darkcore { public class Engine : Object {
     public Gee.ArrayList<Texture*> textures; 
     public Gee.ArrayList<Sprite> sprites; 
     public Gee.ArrayList<int> remove_queue;  
-    public Gee.ArrayList<Sound> sounds;
+    //public Gee.ArrayList<Sound> sounds;
     public GLuint tids[32];
     public KeyState keys;
     public Sprite player;
@@ -30,7 +30,7 @@ namespace Darkcore { public class Engine : Object {
         this.textures = new Gee.ArrayList<Texture>();
         this.sprites = new Gee.ArrayList<Sprite>();
         this.remove_queue = new Gee.ArrayList<int>();
-        this.sounds = new Gee.ArrayList<Sound>();
+        //this.sounds = new Gee.ArrayList<Sound>();
         this.timed_events = new Gee.ArrayList<Darkcore.EventManager>(); 
         this.render_events = new Gee.ArrayList<Darkcore.EventManager>(); 
         this.keys = new KeyState();
