@@ -56,7 +56,7 @@ public class GameDemo : Object {
         
 		//load the other sprites
 		var ship = new Ship (ref engine);
-		var ship_ex = new Ship_ex (ref engine);
+		var exp= new Exp (ref engine);
 		engine.sprites.add (ship); 
 		var bomb = new Bomb (ref engine);
 		// the rocks in an array
@@ -97,17 +97,29 @@ public class GameDemo : Object {
 			}
 			
 			
-			if (ship.dead && !ship.pause) {
+			if (ship.dead && !ship.pause && !exp.activ) {
 				print ("Ship died\n");
 				engine.sounds[2].play ();
-				 
+				 exp.activ=true;
 				life++;
 				ship.pause = true;
-				ship_ex.x = ship.x;
-				ship_ex.y = ship.y;
+				exp.x = ship.x;
+				exp.y = ship.y;
 				engine.remove_sprite (ship);
-				engine.sprites.add (ship_ex);
-				//ship_ex.anima_tile (0,3);
+				engine.sprites.add (exp);
+				engine.add_timer(() => {
+					ship.fired=false;
+					print("Animation Ends"+"\n");
+					exp.activ=false;
+					engine.sprites.remove (exp);
+					ship.x = engine.width/2;
+					ship.y = engine.height/2;
+					engine.sprites.add (ship);
+					ship.pause = false;
+					ship.dead = false;
+					exp.activ = false;
+				}, 500);
+				
 			}
 			
 			if (bomb.explosion) {
@@ -130,15 +142,7 @@ public class GameDemo : Object {
 				bomb.out_of_screen=false;
 				ship.fired=false;
 				}
-			if (ship_ex.activ && ship.dead) {
-				ship.pause = false;
-				ship.dead = false;
-				ship_ex.activ = false;
-				ship.x = engine.width/2;
-				ship.y = engine.height/2;
-				//engine.sprites.add (ship);
-				engine.sprites.remove (ship_ex);
-			}
+			
 			if (bomb.game_over){
 				text.set_text (@"\nG A M E  O V E R : YOU WIN");
 				ship.fired=false;

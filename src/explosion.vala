@@ -1,52 +1,56 @@
 using Gee;
-public class Ship_ex : Darkcore.Sprite {
-    public double velocity_x;
-    public double velocity_y;
+public class Exp : Darkcore.Sprite {
+	 
+    //public double rot=0.25;
+	//public bool fired=false;
 	public bool activ=false;
-
-   
-    public Ship_ex (ref Darkcore.Engine engine) {
-        base.from_file (engine, "resources/ship.png");
+	public int dx;
+	public int dy;
+	public int delay;
+ 
+    //public bool pause=false;
+         
+    public Exp (ref Darkcore.Engine engine) {
+        base.from_file (engine, "resources/exp2.png");
         this.width = 64.00;
         this.height = 64.00;
-        this.x = 0;
-        this.y = 0;
-        this.velocity_x = Random.int_range(100, 400)/100;
-        this.velocity_y = Random.int_range(100, 400)/100;
         this.world = engine;
-		//this.delay=0;
+        this.x = engine.width/2;
+        this.y = engine.height/2;
+        this.tile_width = 0.25;
+        this.tile_height = 0.25;
+        this.dx=0;
+        this.dy=0;
+        this.delay=0;
+        anima_tile (0, 0);
 		
+      	 }  
+        public override void on_key_press() {
+			var gamestate = (GameState) world.gamestate;
+			 
+			if (activ){
+			next_anim();
+			
+			}
+		}
+		public void next_anim(){
+			
+			delay++;
+			if (delay>20){
+			//print("dy "+dy.to_string()+" dx "+dx.to_string()+"\n");
+			anima_tile(dy,dx);
+			delay=0;
+			dx++;
+			if (dx>4){ 
+				dx=0;dy++;
+				if (dy>4){dy=0; activ=false;}
+				}
+			}
+		
+		}
+		
+			
     }
 
-   
-    public override void on_render () {
-		var gamestate = (GameState) world.gamestate;
-		var half_height = height / 2.00;
-        var half_width = width / 2.00;
-        if (y + half_height + velocity_y >= world.height) {
-			activ=true;
-			gamestate.fire_score ();
-			}
-        if (y - half_height - velocity_y <= 0) {
-			activ=true;
-			gamestate.fire_score ();
-        }
-        if (x + half_width + velocity_x >= world.width) {
-			activ=true;
-			gamestate.fire_score ();
-        }
-        if (x - half_width - velocity_x <= 0) {
-			activ=true;
-			gamestate.fire_score ();
-        }
 
-
-        x += velocity_x;
-        y += velocity_y;
-        rotation +=10;
-        //dx=delay;
-		
-   }   
    
-   
-}
