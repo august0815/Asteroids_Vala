@@ -13,6 +13,7 @@ public class Ship : Darkcore.Sprite {
     public bool dead=false;
     public bool pause=false;
     public double fuel;
+    public bool plasma;
          
     public Ship (ref Darkcore.Engine engine) {
 		base.from_file(engine ,"resources/ship.png");
@@ -62,18 +63,26 @@ public class Ship : Darkcore.Sprite {
         if ((up == "up" && world.keys.up || up == "w" && world.keys.w) && (fuel>0)) {
             y += 4;
             fuel= fuel-0.01;
+            plasma=true;
+            gamestate.fire_score ();
         }
         if ((down == "down" && world.keys.down || down == "s" && world.keys.s) && (fuel>0)) {
             y -= 4;
             fuel= fuel-0.01;
+            plasma=true;
+            gamestate.fire_score ();
         }
         if ((right == "right" && world.keys.right || right == "d" && world.keys.w) && (fuel>0)) {
             x += 4;
             fuel= fuel-0.01;
+            plasma=true;
+            gamestate.fire_score ();
         }
         if ((left == "left" && world.keys.left || left == "a" && world.keys.s) && (fuel>0)) {
             x -= 4;
             fuel= fuel-0.01;
+            plasma=true;
+            gamestate.fire_score ();
         }
         if ((space == "space" && world.keys.space)  ) {
             fired=true;
