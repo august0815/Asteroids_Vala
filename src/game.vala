@@ -57,6 +57,8 @@ public class GameDemo : Object {
     
 		var ship = new Ship (ref engine);
 		engine.sprites.add (ship); 
+		var plasma = new Plasma (ref engine);
+		//engine.sprites.add (plasma); 
 		var exp = new Exp (ref engine);
 		//engine.sprites.add (exp);
 		
@@ -71,7 +73,16 @@ public class GameDemo : Object {
 		state.on_score = () => {
 			//ball.reset_location (engine);
             //ball.pause ();
-            
+            if (ship.plasma){
+			plasma.x=ship.x;//16
+			plasma.y=ship.y;//16
+             engine.sprites.add (plasma);
+             engine.add_timer(() => {
+				 ship.plasma=false;
+				  engine.sprites.remove (plasma);
+			}, 50);
+			}
+             
             if (ship.fired && !c.activ){
 			c.activ=true;
 			exp.activ=true;

@@ -27,6 +27,7 @@ FILES = \
     src/gamestat.vala \
     src/game.vala \
     src/ship.vala \
+    src/plasma.vala \
     src/exp.vala
   
 
