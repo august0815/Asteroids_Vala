@@ -103,7 +103,7 @@ public class Bomb : Darkcore.Sprite {
 			if (has_hit_rock (r) && activ ){
 				           
 				rock_index=rocks.index_of (r);
-				print("Hit rock %s\n", rock_index.to_string());
+				//print("Hit rock %s\n", rock_index.to_string());
 				activ=false;
 				explosion=true;
 				gamestate.fire_score ();

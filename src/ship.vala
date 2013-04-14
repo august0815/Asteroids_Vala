@@ -5,7 +5,7 @@ public class Ship : Darkcore.Sprite {
     public string left { get; set; default = "left"; }
     public string right { get; set; default = "right"; }
     public string space { get; set; default = "space"; }
-    public double rot=0.25;
+    public double rot=0.02;
     public double richtung;
     public bool fired=false;
     public ArrayList<Rock> rocks;
@@ -90,7 +90,7 @@ public class Ship : Darkcore.Sprite {
         if (!pause) {          
         this.x += x;
         this.y += y;
-        //rotation += rot;
+        rotation += rot;
         if (rotation>360) {rotation=0;}
         richtung=rotation;
 		}
@@ -107,5 +107,7 @@ public class Ship : Darkcore.Sprite {
     public void add_rock(Rock r){
 		rocks.add(r);
 	}
-   
+	public void levelup(){
+		rot=rot + 0.02;
+	}
 }

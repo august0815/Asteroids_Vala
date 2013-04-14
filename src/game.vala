@@ -2,16 +2,21 @@ using GL;
 using Gee;
 
 public class GameDemo : Object {
-    
+    public Ship ship;
+    public Exp exp;
+    public Rock rock;
+    public Bomb bomb;
+    public ArrayList<Rock> rocks=new  ArrayList<Rock> ();
     public GameDemo(){
         var engine = new Darkcore.Engine(1260, 960);
         var state = new GameState();
-        int anzahl=5;
+        int level=1;
+        
         int life=0;
         int bombe=0;
         int hit=0;
-        int level=1;
-        ArrayList<Rock> rocks=new  ArrayList<Rock> ();
+        
+        //ArrayList<Rock> rocks=new  ArrayList<Rock> ();
         var bomb_fired = new Darkcore.Sound ("resources/bomb_launch.ogg");
         engine.sounds.add (bomb_fired);
         var explode = new Darkcore.Sound ("resources/explosion.ogg");
@@ -32,28 +37,20 @@ public class GameDemo : Object {
         //text.x = 0;//why ??
         engine.sprites.add (text);
         //engine.add_sprite (ref text);
-        
-		//load the other sprites
-		var ship = new Ship (ref engine);
-		var exp= new Exp (ref engine);
+        ship = new Ship (ref engine);
+		exp= new Exp (ref engine);
 		engine.sprites.add (ship); 
-		var bomb = new Bomb (ref engine);
-		// the rocks in an array
-		for (int j=0;j<anzahl;j++){
-			var rock = new Rock (ref engine);
-			rock.i = j;
-			engine.sprites.add (rock);
-			rocks.add (rock);
-			ship.add_rock (rock);
-			bomb.add_rock (rock);
-		}
-
-		state.bomb = bomb;
+		bomb = new Bomb (ref engine);
+		
+        start_level(ref engine , 0);
+        state.bomb = bomb;
 		state.ship = ship;
 		//is this needed??
 		foreach (Rock r in rocks) {
 			state.rock = r;
 		}
+        
+
 		// This must be defined outside the score event
 		// If defined inside the anon on score function
 		// you'd get a segment fault :(
@@ -129,13 +126,21 @@ public class GameDemo : Object {
 				}
 			
 			if (bomb.game_over){
-				
-				
+				level++;
+				if (level>4){
 				ship.fired=false;
 				engine.sprites.remove (ship);
 				//engine.sprites.remove (text);
 				text.aktuell="G A M E  O V E R : YOU WIN";
 				//engine.sprites.add (text);
+				}
+				else {
+					text.level=level;
+					text.update();
+					bomb.game_over=false;
+					start_level(ref engine ,level);
+					ship.levelup();
+				}
 			}
 		};
         
@@ -144,4 +149,17 @@ public class GameDemo : Object {
         engine.run ();
 
     }
+    public void start_level(ref Darkcore.Engine engine,int level){
+		int anzahl=2+(level*2);
+		//load the other sprites
+		// the rocks in an array
+		for (int j=0;j<anzahl;j++){
+			rock = new Rock (ref engine,level);
+			rock.i = j;
+			engine.sprites.add (rock);
+			rocks.add (rock);
+			ship.add_rock (rock);
+			bomb.add_rock (rock);
+		}
+	}
 }

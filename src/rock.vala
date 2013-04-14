@@ -7,7 +7,7 @@ public class Rock : Darkcore.Sprite {
     public double rot=Random.int_range(5,30)/10;
     public int i;
      
-    public Rock (ref Darkcore.Engine engine) {
+    public Rock (ref Darkcore.Engine engine,int level) {
         var rock_sprite=engine.add_texture ("resources/rock.png");
         base.from_texture(engine ,rock_sprite);
         this.width = 64.00;
@@ -15,8 +15,8 @@ public class Rock : Darkcore.Sprite {
         this.world = engine;
         this.x = Random.int_range(1000, 90000)/100;;
         this.y = Random.int_range(1000, 90000)/100;
-        this.velocity_x = Random.int_range(30, 500)/100;
-        this.velocity_y = Random.int_range(30, 500)/100;
+        this.velocity_x = Random.int_range(30, 500+(100*level))/100;
+        this.velocity_y = Random.int_range(30, 500+(100*level))/100;
     }
     
     public override void on_render () {
