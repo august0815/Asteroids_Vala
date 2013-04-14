@@ -12,7 +12,7 @@ public class Ship_ex : Darkcore.Sprite {
         this.x = 0;
         this.y = 0;
         this.world = engine;
-		this.delay=0;
+		//this.delay=0;
 		
     }
 
@@ -42,7 +42,7 @@ public class Ship_ex : Darkcore.Sprite {
         x += velocity_x;
         y += velocity_y;
         rotation +=10;
-        dx=delay;
+        //dx=delay;
 		
    }   
    
