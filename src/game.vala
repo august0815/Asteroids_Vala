@@ -78,6 +78,8 @@ public class GameDemo : Object {
             engine.sprites.add (c);
             print("Start animation"+"\n");
             engine.sprites.remove (ship);
+				exp.dx=0;
+				exp.dy=0;
             engine.sprites.add (exp);
             engine.add_timer(() => {
                 ship.fired=false;
@@ -87,7 +89,7 @@ public class GameDemo : Object {
                  engine.sprites.add (ship);
                 engine.sprites.remove (c);
                 engine.sprites.remove (exp);
-            }, 1000);
+            }, 500);
             
 		}
         
