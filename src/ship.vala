@@ -60,25 +60,25 @@ public class Ship : Darkcore.Sprite {
 		var x = 0;
         var y = 0;
         // keyspressed?
-        if ((up == "up" && world.keys.up || up == "w" && world.keys.w) && (fuel>0)) {
+        if ((up == "up" && world.keys.up || up == "w" && world.keys.w) && (fuel>0)&&!plasma) {
             y += 4;
             fuel= fuel-0.01;
             plasma=true;
             gamestate.fire_score ();
         }
-        if ((down == "down" && world.keys.down || down == "s" && world.keys.s) && (fuel>0)) {
+        if ((down == "down" && world.keys.down || down == "s" && world.keys.s) && (fuel>0)&&!plasma) {
             y -= 4;
             fuel= fuel-0.01;
             plasma=true;
             gamestate.fire_score ();
         }
-        if ((right == "right" && world.keys.right || right == "d" && world.keys.w) && (fuel>0)) {
+        if ((right == "right" && world.keys.right || right == "d" && world.keys.w) && (fuel>0)&&!plasma) {
             x += 4;
             fuel= fuel-0.01;
             plasma=true;
             gamestate.fire_score ();
         }
-        if ((left == "left" && world.keys.left || left == "a" && world.keys.s) && (fuel>0)) {
+        if ((left == "left" && world.keys.left || left == "a" && world.keys.s) && (fuel>0)&&!plasma) {
             x -= 4;
             fuel= fuel-0.01;
             plasma=true;
