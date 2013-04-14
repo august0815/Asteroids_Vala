@@ -13,6 +13,7 @@ namespace Darkcore { public class KeyState : Object {
     public bool s { get; set; default = false; }
     public bool a { get; set; default = false; }
     public bool d { get; set; default = false; }
+    public bool b { get; set; default = false; }
     public KeyState() {
     
     }

@@ -5,12 +5,14 @@ public class Ship : Darkcore.Sprite {
     public string left { get; set; default = "left"; }
     public string right { get; set; default = "right"; }
     public string space { get; set; default = "space"; }
+    public string b { get; set; default = "b"; }
     public double rot=0.02;
     public double richtung;
     public bool fired=false;
     public ArrayList<Rock> rocks;
     public bool dead=false;
     public bool pause=false;
+    public double fuel;
          
     public Ship (ref Darkcore.Engine engine) {
 		base.from_file(engine ,"resources/ship.png");
@@ -20,6 +22,7 @@ public class Ship : Darkcore.Sprite {
         this.x = engine.width/2;
         this.y = engine.height/2;
         rocks=new  ArrayList<Rock> ();
+        this.fuel=100;//prozent
         
     }
 		
@@ -56,19 +59,28 @@ public class Ship : Darkcore.Sprite {
 		var x = 0;
         var y = 0;
         // keyspressed?
-        if (up == "up" && world.keys.up || up == "w" && world.keys.w) {
+        if ((up == "up" && world.keys.up || up == "w" && world.keys.w) && (fuel>0)) {
             y += 4;
+            fuel= fuel-0.01;
         }
-        if (down == "down" && world.keys.down || down == "s" && world.keys.s) {
+        if ((down == "down" && world.keys.down || down == "s" && world.keys.s) && (fuel>0)) {
             y -= 4;
+            fuel= fuel-0.01;
         }
-        if (right == "right" && world.keys.right || right == "d" && world.keys.w) {
+        if ((right == "right" && world.keys.right || right == "d" && world.keys.w) && (fuel>0)) {
             x += 4;
+            fuel= fuel-0.01;
         }
-        if (left == "left" && world.keys.left || left == "a" && world.keys.s) {
+        if ((left == "left" && world.keys.left || left == "a" && world.keys.s) && (fuel>0)) {
             x -= 4;
+            fuel= fuel-0.01;
         }
         if ((space == "space" && world.keys.space)  ) {
+            fired=true;
+            gamestate.fire_score ();
+            fired=false;
+        }
+        if ((b == "b" && world.keys.b)  ) {
             fired=true;
             gamestate.fire_score ();
             fired=false;

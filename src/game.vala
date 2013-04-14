@@ -6,6 +6,7 @@ public class GameDemo : Object {
     public Exp exp;
     public Rock rock;
     public Bomb bomb;
+    
     public ArrayList<Rock> rocks=new  ArrayList<Rock> ();
     public GameDemo(){
         var engine = new Darkcore.Engine(1260, 960);
@@ -55,6 +56,8 @@ public class GameDemo : Object {
 		// If defined inside the anon on score function
 		// you'd get a segment fault :(
 		state.on_score = () => {
+			text.fuel=(int)ship.fuel;
+			text.update();
 			// some event fired !
 			if (ship.fired) {
 			// display bomb  in the given direction
