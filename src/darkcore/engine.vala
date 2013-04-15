@@ -24,6 +24,7 @@ namespace Darkcore { public class Engine : Object {
     public double mouse_x { get; set; default = 0.00; }
     public double mouse_y { get; set; default = 0.00; }
     public Object gamestate;
+    public int[4] background_color = {255, 255, 255, 255};
     
     public Engine(int width, int height) {
         SDL.init (InitFlag.VIDEO |  InitFlag.AUDIO);
@@ -170,7 +171,10 @@ namespace Darkcore { public class Engine : Object {
         glCullFace(GL_BACK);
         glFrontFace(GL_CCW);
         glEnable(GL_CULL_FACE);
-        glClearColor(255, 255, 255, 255);
+        glClearColor(
+		    this.background_color[0], this.background_color[1], 
+		    this.background_color[3], this.background_color[4]
+        );
         glViewport(0, 0, (GL.GLsizei) this.screen.w, (GL.GLsizei) this.screen.h);
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
@@ -186,7 +190,6 @@ namespace Darkcore { public class Engine : Object {
     }
     
     public void remove_sprite (Sprite item) {
-    	print("Pending Delete '%s'\n", item.id);
     	var item_index = sprites.index_of (item);
     	
     	//-- Make sure we only need to remove it once.
@@ -325,5 +328,12 @@ namespace Darkcore { public class Engine : Object {
     public int add_texture(string filename) {
         this.textures.add(new Texture.from_file(filename, this));
         return this.textures.size - 1;
+    }
+    
+    public void set_background_color(int r, int g, int b, int a) {
+    	this.background_color[0] = r;
+    	this.background_color[1] = g;
+    	this.background_color[2] = b;
+    	this.background_color[3] = a;
     }
 }}
