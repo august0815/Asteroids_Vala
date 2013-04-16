@@ -19,7 +19,7 @@ public class Plasma : Darkcore.Sprite {
         this.x =0;
         this.y =0;
         }  
-        public override void on_render() {
+        public override void on_render(uint32 ticks) {
 		var gamestate = (GameState) world.gamestate;
 		rotation += rot;
            
