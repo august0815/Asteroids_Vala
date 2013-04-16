@@ -17,7 +17,7 @@ public class FPSText : Darkcore.SpriteNS.Text {
 						" Asteroids hit : " +hit.to_string() + " Fuel : "+fuel.to_string();
     }
     
-    public override void on_render () {
+    public override void on_render (uint32 ticks) {
         data = @aktuell;
     }
     public void update(){

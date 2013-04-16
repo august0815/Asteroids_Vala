@@ -24,7 +24,14 @@ namespace Darkcore { public class Sprite : Object {
     public uchar color_b { get; set; default = 255; }
     public double scale_x { get; set; default = 1.00; }
     public double scale_y { get; set; default = 1.00; }
+    public bool animation { get; set; default = false; }
+    public int animation_from { get; set; default = 0; }
+    public int animation_to { get; set; default = 0; }
+    public int animation_current { get; set; default = 0; }
+    public int animation_duration { get; set; default = 60; }
+    public uint32 animation_last_tick { get; set; default = 0; }
     public int texture_index { get; set; default = -1; }
+    public EventCallback animation_event;
     public unowned Engine world;
     
     public Sprite() {
@@ -91,11 +98,27 @@ namespace Darkcore { public class Sprite : Object {
         this.coords_top_right_x    = tmp_bottom_right_x;
         this.coords_top_right_y    = tmp_bottom_right_y;
     }
+    
+    public void animation_start (int from, int to, int delay) {
+    	if (!this.animation) {
+    		this.animation = true;
+    		this.animation_duration = delay;
+    		this.animation_from = from;
+    		this.animation_current = from;
+    		this.animation_to = to;
+    		this.animation_last_tick = SDL.Timer.get_ticks();
+    	}
+    }
+    
+    public virtual void animation_stop() {
+    	this.animation = false;
+    }
+    
     public virtual void on_key_press() {
     }
-    public virtual void on_render() {
+    public virtual void on_render(uint32 ticks) {
     }
-    public virtual void render() {
+    public virtual void render(uint32 ticks) {
         Texture? texture = null;
         if (this.texture_index > -1) {
             glEnable(GL_TEXTURE_2D);
@@ -122,6 +145,21 @@ namespace Darkcore { public class Sprite : Object {
         if (rotation != 0.00) {
             glRotated(rotation, 0.00, 0.00, 1.00);
         }
+        
+    	if (this.animation) {
+    		if (ticks - this.animation_last_tick > this.animation_duration) {
+				var pitch = (int) Math.floor (texture.width / this.width);
+				var y = (int) Math.floor (this.animation_current / pitch);
+				var x = this.animation_current - (y * pitch);
+				anima_tile (x, y);
+				this.animation_current++;
+				if (this.animation_current > this.animation_to) {
+					this.animation_current = this.animation_from;
+				}
+				this.animation_last_tick = SDL.Timer.get_ticks ();
+    		}
+    	}
+        
         glColor3ub((GLubyte) color_r, (GLubyte) color_g, (GLubyte) color_b);
          glBegin(GL_QUADS);
             

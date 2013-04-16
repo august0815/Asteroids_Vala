@@ -42,8 +42,10 @@ public class GameDemo : Object {
         ship = new Ship (ref engine);
 		exp= new Exp (ref engine);
 		plasma = new Plasma (ref engine);
+		engine.sprites.add (exp); 
 		engine.sprites.add (ship); 
 		bomb = new Bomb (ref engine);
+		exp.animation_start(0, 15, 60);
 		
         start_level(ref engine , 0);
         state.bomb = bomb;
@@ -58,6 +60,7 @@ public class GameDemo : Object {
 		// If defined inside the anon on score function
 		// you'd get a segment fault :(
 		state.on_score = () => {
+		
 			
 			// some event fired !
 			if (ship.plasma){

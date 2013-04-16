@@ -13,7 +13,7 @@ public class Background : Darkcore.Sprite {
     }
 
    
-    public override void on_render () {
+    public override void on_render (uint32 ticks) {
 		
    }   
 }
