@@ -42,10 +42,8 @@ public class GameDemo : Object {
         ship = new Ship (ref engine);
 		exp= new Exp (ref engine);
 		plasma = new Plasma (ref engine);
-		engine.sprites.add (exp); 
 		engine.sprites.add (ship); 
 		bomb = new Bomb (ref engine);
-		exp.animation_start(0, 15, 60);
 		
         start_level(ref engine , 0);
         state.bomb = bomb;
@@ -106,10 +104,12 @@ public class GameDemo : Object {
 				exp.y = ship.y;
 				engine.remove_sprite (ship);
 				engine.sprites.add (exp);
+				exp.animation_start(0, 15, 60);
 				engine.add_timer(() => {
 					ship.fired=false;
 					print("Animation Ends"+"\n");
 					exp.activ=false;
+					exp.animation_stop();
 					engine.sprites.remove (exp);
 					ship.x = engine.width/2;
 					ship.y = engine.height/2;
