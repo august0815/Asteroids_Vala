@@ -19,7 +19,7 @@ public class Rock : Darkcore.Sprite {
         this.velocity_y = Random.int_range(30, 500+(100*level))/100;
     }
     
-    public override void on_render () {
+    public override void on_render (uint32 ticks) {
 		var half_height = height / 2.00;
         var half_width = width / 2.00;
         // test if rock hits the screen border

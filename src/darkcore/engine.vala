@@ -23,8 +23,9 @@ namespace Darkcore { public class Engine : Object {
     public double camera_y { get; set; default = 0.00; }
     public double mouse_x { get; set; default = 0.00; }
     public double mouse_y { get; set; default = 0.00; }
+    public string title { get; set; default = ""; }
     public Object gamestate;
-    public int[4] background_color = {255, 255, 255, 255};
+    public int[] background_color = {255, 255, 255, 255};
     
     public Engine(int width, int height) {
         SDL.init (InitFlag.VIDEO |  InitFlag.AUDIO);
@@ -199,60 +200,23 @@ namespace Darkcore { public class Engine : Object {
     }
     
 
-    public void draw () {
+    public void draw (uint32 ticks) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         // This is where the camera would translate
         glTranslated(camera_x, camera_y, -10);
         
-        /*
-        TODO: Add tile based map support
-        Texture? tex = null;
-        if (this.textures.size > 0) {
-            tex = this.textures.get(0);
-        }
-        glEnable(GL_TEXTURE_2D);
-        if (tex != null && tex.loaded > 0) {
-            glBindTexture(GL_TEXTURE_2D, this.tids[tex.texture_id]);
-        }
-        
-        var px = 16;
-        var py = 16;
-        var pz = 0;
-        glBegin(GL_QUADS);
-            glColor3d(1.0, 1.0, 1.0);
-            glTexCoord2f((GLfloat) 0.00, (GLfloat) 0.00); 
-            glVertex3i(-px,  py, pz);
-            glTexCoord2f((GLfloat) 0.50, (GLfloat) 0.00);
-            glVertex3i(-px, -py, pz);
-            glTexCoord2f((GLfloat) 0.50, (GLfloat) 0.50); 
-            glVertex3i( px, -py, pz);
-            glTexCoord2f((GLfloat) 0.00, (GLfloat) 0.50); 
-            glVertex3i( px,  py, pz);
-        glEnd();
-        
-        if (tex != null && tex.loaded > 0) {
-            glBindTexture(GL_TEXTURE_2D, (GLuint) 0);
-        }
-        
-        glDisable(GL_TEXTURE_2D);
-        */
-        
-        //
-    	    
-        
         if (sprites != null && sprites.size > 0) {
 			foreach (var sprite in sprites) {
-		        sprite.on_render();
-		        sprite.render();
+		        sprite.on_render (ticks);
+		        sprite.render (ticks);
 			}
         }
         
         if (remove_queue != null && remove_queue.size > 0) {
 			foreach (var sprite_index in remove_queue) {
 				var item = sprites[sprite_index];
-    			print("Deleted '%s'\n", item.id);
 		        sprites.remove_at(sprite_index);
 			}
 			remove_queue.clear();
@@ -301,7 +265,7 @@ namespace Darkcore { public class Engine : Object {
                 SDL.Timer.delay(1000 / (60 * 6));
             }
             
-            this.draw ();
+            this.draw (new_time);
             fps++;
             
             SDL.Timer.delay(minticks);
@@ -330,7 +294,7 @@ namespace Darkcore { public class Engine : Object {
         return this.textures.size - 1;
     }
     
-    public void set_background_color(int r, int g, int b, int a) {
+    public void set_background_color (int r, int g, int b, int a) {
     	this.background_color[0] = r;
     	this.background_color[1] = g;
     	this.background_color[2] = b;

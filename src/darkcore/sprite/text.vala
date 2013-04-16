@@ -15,7 +15,7 @@ namespace Darkcore {
                 data = text;
             }
             
-            public override void render() {
+            public override void render(uint32 ticks) {
                 var texture = this.world.textures[this.texture_index];
                 var fw = 1.00 / (texture->width / character_width);
                 var no_of_chars_per_line = texture->width / character_width;
@@ -54,7 +54,7 @@ namespace Darkcore {
                     word = word.next_char ();
                     c = word.get_char ();
                     i++;
-                    base.render();
+                    base.render(ticks);
                 }
             }
         }

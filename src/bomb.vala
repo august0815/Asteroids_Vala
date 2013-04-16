@@ -47,7 +47,7 @@ public class Bomb : Darkcore.Sprite {
         
         return hit;
     }
-    public override void on_render () {
+    public override void on_render (uint32 ticks) {
 		var gamestate = (GameState) world.gamestate;
 		var half_height = height / 2.00;
         var half_width = width / 2.00;
