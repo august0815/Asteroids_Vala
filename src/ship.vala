@@ -62,28 +62,20 @@ public class Ship : Darkcore.Sprite {
         // keyspressed?
         if ((up == "up" && world.keys.up || up == "w" && world.keys.w) && (fuel>0)&&!plasma) {
             y += 4;
-            fuel= fuel-0.01;
-            plasma=true;
-            gamestate.fire_score ();
+            animate();
         }
         if ((down == "down" && world.keys.down || down == "s" && world.keys.s) && (fuel>0)&&!plasma) {
             y -= 4;
-            fuel= fuel-0.01;
-            plasma=true;
-            gamestate.fire_score ();
-        }
+            animate();
+          }
         if ((right == "right" && world.keys.right || right == "d" && world.keys.w) && (fuel>0)&&!plasma) {
             x += 4;
-            fuel= fuel-0.01;
-            plasma=true;
-            gamestate.fire_score ();
-        }
+			animate();
+			}
         if ((left == "left" && world.keys.left || left == "a" && world.keys.s) && (fuel>0)&&!plasma) {
             x -= 4;
-            fuel= fuel-0.01;
-            plasma=true;
-            gamestate.fire_score ();
-        }
+            animate();
+            }
         if ((space == "space" && world.keys.space)  ) {
             fired=true;
             gamestate.fire_score ();
@@ -131,4 +123,10 @@ public class Ship : Darkcore.Sprite {
 	public void levelup(){
 		rot=rot + 0.02;
 	}
+	public void animate(){
+			var gamestate = (GameState) world.gamestate;
+		    fuel= fuel-0.01;
+            plasma=true;
+            gamestate.fire_score ();
+		}
 }
