@@ -46,7 +46,7 @@ public class Ship_ex : Darkcore.Sprite {
 
             x += velocity_x;
             y += velocity_y;
-            rotation +=10;
+           // rotation +=10;
            
             
             

@@ -28,12 +28,12 @@ public class Exp : Darkcore.Sprite {
         public override void on_key_press() {
 			var gamestate = (GameState) world.gamestate;
 			 
-			if (activ){
+		/*	if (activ){
 			next_anim();
 			
-			}
+			}*/
 		}
-		public void next_anim(){
+		/* public void next_anim(){
 			
 			delay++;
 			if (delay>20){
@@ -47,7 +47,7 @@ public class Exp : Darkcore.Sprite {
 				}
 			}
 		
-		}
+		}*/
 		
 			
     }

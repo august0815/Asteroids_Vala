@@ -5,7 +5,7 @@ using Gee;
 public class Circle : Darkcore.Sprite {
     public double radius { get; set; default = 0.00; }
     public bool activ=false;
-    public override void render () {
+    public override void render (uint32 ticks) {
         const double DEG2RAD = 3.14159 / 180.00;
 
         glPushMatrix ();
@@ -81,17 +81,19 @@ public class GameDemo : Object {
 				 ship.plasma=false;
 				  engine.sprites.remove (plasma);
 			}, 50);
-			}
+			} 
              
             if (ship.fired && !c.activ){
 			c.activ=true;
 			exp.activ=true;
             engine.sprites.add (c);
+            
             print("Start animation"+"\n");
             engine.sprites.remove (ship);
 				exp.dx=0;
 				exp.dy=0;
-            engine.sprites.add (exp);
+				engine.sprites.add (exp);
+            exp.animation_start (0,15,100);
             engine.add_timer(() => {
                 ship.fired=false;
                  print("Animation Ends"+"\n");
@@ -100,7 +102,8 @@ public class GameDemo : Object {
                  engine.sprites.add (ship);
                 engine.sprites.remove (c);
                 engine.sprites.remove (exp);
-            }, 500);
+               exp.animation_stop ();
+            }, 200);
             
 		}
         
