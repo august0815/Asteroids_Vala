@@ -13,7 +13,8 @@ public class Ship : Darkcore.Sprite {
     public bool dead=false;
     public bool pause=false;
     public double fuel;
-    public bool plasma;
+    public bool move;
+    public bool flip;
          
     public Ship (ref Darkcore.Engine engine) {
 		base.from_file(engine ,"resources/ship.png");
@@ -24,7 +25,10 @@ public class Ship : Darkcore.Sprite {
         this.y = engine.height/2;
         rocks=new  ArrayList<Rock> ();
         this.fuel=100;//prozent
-        
+        this.tile_width = 0.5;
+        this.tile_height = 1;
+        this.flip=true;
+        anima_tile(0,0);
     }
 		
         public bool has_hit_rock (Darkcore.Sprite sprite) {
@@ -60,19 +64,19 @@ public class Ship : Darkcore.Sprite {
 		var x = 0;
         var y = 0;
         // keyspressed?
-        if ((up == "up" && world.keys.up || up == "w" && world.keys.w) && (fuel>0)&&!plasma) {
+        if ((up == "up" && world.keys.up || up == "w" && world.keys.w) && (fuel>0)&&!move) {
             y += 4;
             animate();
         }
-        if ((down == "down" && world.keys.down || down == "s" && world.keys.s) && (fuel>0)&&!plasma) {
+        if ((down == "down" && world.keys.down || down == "s" && world.keys.s) && (fuel>0)&&!move) {
             y -= 4;
             animate();
           }
-        if ((right == "right" && world.keys.right || right == "d" && world.keys.w) && (fuel>0)&&!plasma) {
+        if ((right == "right" && world.keys.right || right == "d" && world.keys.w) && (fuel>0)&&!move) {
             x += 4;
 			animate();
 			}
-        if ((left == "left" && world.keys.left || left == "a" && world.keys.s) && (fuel>0)&&!plasma) {
+        if ((left == "left" && world.keys.left || left == "a" && world.keys.s) && (fuel>0)&&!move) {
             x -= 4;
             animate();
             }
@@ -124,9 +128,18 @@ public class Ship : Darkcore.Sprite {
 		rot=rot + 0.02;
 	}
 	public void animate(){
+			
+			if (flip){flip=false;
+			animation_start(0, 1, 40);
+			}
+			else{flip=true;
+			animation_stop();
+			}
 			var gamestate = (GameState) world.gamestate;
+			//for (int i=0;i<50000;i++){var j=0;}
+			print(flip.to_string()+"\n");
 		    fuel= fuel-0.01;
-            plasma=true;
+            move=true;
             gamestate.fire_score ();
-		}
+            }
 }

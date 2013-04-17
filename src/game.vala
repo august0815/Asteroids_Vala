@@ -6,7 +6,7 @@ public class GameDemo : Object {
     public Exp exp;
     public Rock rock;
     public Bomb bomb;
-    public Plasma plasma;
+    //public Plasma plasma;
     
     public ArrayList<Rock> rocks=new  ArrayList<Rock> ();
     public GameDemo(){
@@ -41,7 +41,7 @@ public class GameDemo : Object {
         //engine.add_sprite (ref text);
         ship = new Ship (ref engine);
 		exp= new Exp (ref engine);
-		plasma = new Plasma (ref engine);
+		//plasma = new Plasma (ref engine);
 		engine.sprites.add (ship); 
 		bomb = new Bomb (ref engine);
 		
@@ -61,17 +61,18 @@ public class GameDemo : Object {
 		
 			
 			// some event fired !
-			if (ship.plasma){
+			if (ship.move){
 			text.fuel=(int)ship.fuel;
 			text.update();
-			plasma.x=ship.x;
+		/*	plasma.x=ship.x;
 			plasma.y=ship.y;
 			plasma.rotation=ship.rotation;
              engine.sprites.add (plasma);
              engine.add_timer(() => {
 				 ship.plasma=false;
 				  engine.sprites.remove (plasma);
-			}, 50);
+			}, 50);*/
+			ship.move=false;
 			}
 			if (ship.fired) {
 			// display bomb  in the given direction
