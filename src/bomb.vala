@@ -8,6 +8,7 @@ public class Bomb : Darkcore.Sprite {
     public ArrayList<Rock> rocks;
     public int rock_index;
     public bool game_over=false;
+    public int index;
     public Bomb (ref Darkcore.Engine engine) {
         base.from_file (engine, "resources/bomb.png");
         this.id = "Bomb";
@@ -19,7 +20,7 @@ public class Bomb : Darkcore.Sprite {
         this.velocity_x = 0;
         this.velocity_y = 0;
         rocks=new  ArrayList<Rock> ();
-    }
+        }
     //collision test
     public bool has_hit_rock (Darkcore.Sprite sprite) {
         var circle_vector = new Darkcore.Vector(2);

@@ -4,12 +4,14 @@ public class Exp : Darkcore.Sprite {
     //public double rot=0.25;
 	//public bool fired=false;
 	public bool activ=false;
+	public int index;
 
  
     //public bool pause=false;
          
     public Exp (ref Darkcore.Engine engine) {
         base.from_file (engine, "resources/exp2.png");
+        this.id = "Explosion";
         this.width = 64.00;
         this.height = 64.00;
         this.world = engine;

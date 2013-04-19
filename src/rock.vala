@@ -17,6 +17,7 @@ public class Rock : Darkcore.Sprite {
         this.y = Random.int_range(1000, 90000)/100;
         this.velocity_x = Random.int_range(30, 500+(100*level))/100;
         this.velocity_y = Random.int_range(30, 500+(100*level))/100;
+        this.id = "Rock";
     }
     
     public override void on_render (uint32 ticks) {

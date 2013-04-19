@@ -29,6 +29,7 @@ public class Ship : Darkcore.Sprite {
         this.tile_height = 1;
         this.flip=true;
         anima_tile(0,0);
+        this.id = "Ship";
     }
 		
         public bool has_hit_rock (Darkcore.Sprite sprite) {
@@ -137,7 +138,7 @@ public class Ship : Darkcore.Sprite {
 			}
 			var gamestate = (GameState) world.gamestate;
 			//for (int i=0;i<50000;i++){var j=0;}
-			print(flip.to_string()+"\n");
+			//print(flip.to_string()+"\n");
 		    fuel= fuel-0.01;
             move=true;
             gamestate.fire_score ();

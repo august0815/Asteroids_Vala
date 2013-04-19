@@ -10,6 +10,7 @@ public class Background : Darkcore.Sprite {
         this.height = 960.00;
         this.x = this.width/2;//why??
         this.y = this.height/2;//why??
+        this.id = "Background";
     }
 
    

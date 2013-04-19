@@ -13,6 +13,7 @@ public class FPSText : Darkcore.SpriteNS.Text {
         this.life = life;
         this.bombe = bombe;
         this.hit = hit;
+        this.id = "TEXT";
         this.aktuell="Level : "+level.to_string() +" Life lost: "+ life.to_string() +  " Torpedo fired : "+ bombe.to_string() + 
 						" Asteroids hit : " +hit.to_string() + " Fuel : "+fuel.to_string();
     }

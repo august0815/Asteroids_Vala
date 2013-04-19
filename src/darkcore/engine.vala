@@ -188,15 +188,19 @@ namespace Darkcore { public class Engine : Object {
     
     public void add_sprite (Sprite item) {
     	sprites.add (item);
+    	var item_index = sprites.index_of (item);
+    	print("ITEM '%s' has Indexnumber %d\n", item.id,item_index);
     }
     
     public void remove_sprite (Sprite item) {
     	var item_index = sprites.index_of (item);
+    	print("Pending Delete '%s'has Indexnumber %d\n", item.id,item_index); 
     	
     	//-- Make sure we only need to remove it once.
     	if (remove_queue.index_of (item_index) > -1) {
         	remove_queue.add (sprites.index_of (item));
     	}
+    	print("Finish Delete \n");
     }
     
 
@@ -216,7 +220,7 @@ namespace Darkcore { public class Engine : Object {
         
         if (remove_queue != null && remove_queue.size > 0) {
 			foreach (var sprite_index in remove_queue) {
-				var item = sprites[sprite_index];
+				//var item = sprites[sprite_index];
 		        sprites.remove_at(sprite_index);
 			}
 			remove_queue.clear();
@@ -272,7 +276,7 @@ namespace Darkcore { public class Engine : Object {
                 
             // If all works well you should get about 30 frames a second
             if (time_since_last_frame > 1000) {
-                print("FPS: %i\n", fps);
+                //print("FPS: %i\n", fps);
                 old_time = new_time;
                 frames_per_second = fps;
                 fps = 0;
