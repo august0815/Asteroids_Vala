@@ -6,16 +6,19 @@ public class GameDemo : Object {
     public Exp exp;
     public Rock rock;
     public Bomb bomb;
-    //public Plasma plasma;
+    public Fuel fuel;
+    public Shild shild;
+    public Life life;
+    public Torpedo torpedo;
     public Darkcore.Engine engine;
     
     public ArrayList<Rock> rocks=new  ArrayList<Rock> ();
     public GameDemo(){
         engine = new Darkcore.Engine(1260, 960);
         var state = new GameState();
-        int level=1;
+        int level=0;
         
-        int life=0;
+        
         int bombe=0;
         int hit=0;
         
@@ -31,19 +34,26 @@ public class GameDemo : Object {
         var bg=new Background (ref engine);
         engine.sprites.add (bg);
         var item_index = engine.sprites.index_of (bg);
-    	print("ITEM '%s' has Indexnumber %d\n", bg.id,item_index);
+    	//print("ITEM '%s' has Indexnumber %d\n", bg.id,item_index);
         // Add an event to the renderer
         engine.add_event(Darkcore.EventTypes.Render, () => {
             });
         // display some game variables
-        var text = new FPSText.from_texture(engine, 0, ref level, ref life, ref bombe, ref hit);
+        var text = new FPSText.from_texture(engine, 0, ref level,  ref bombe, ref hit);
         text.set_text (""); // Testing
         //is this needed??
         //text.x = 0;//why ??
-        engine.sprites.add (text);
-         item_index = engine.sprites.index_of (text);
-    	print("ITEM '%s' has Indexnumber %d\n", text.id,item_index);
-        //engine.add_sprite (ref text);
+        //engine.sprites.add (text);
+        //StatusDisplay
+        fuel=new Fuel (ref engine);
+        engine.sprites.add (fuel); 
+        shild=new Shild (ref engine);
+        engine.sprites.add (shild); 
+        life=new Life (ref engine);
+        engine.sprites.add (life);
+        torpedo=new Torpedo (ref engine);
+        engine.sprites.add (torpedo);
+       
         ship = new Ship (ref engine);
 		exp= new Exp (ref engine);
 		//plasma = new Plasma (ref engine);
@@ -59,7 +69,7 @@ public class GameDemo : Object {
 		foreach (Rock r in rocks) {
 			state.rock = r;
 		}
-        
+		
 
 		// This must be defined outside the score event
 		// If defined inside the anon on score function
@@ -74,7 +84,7 @@ public class GameDemo : Object {
 			if (ship.fired) {
 			// display bomb  in the given direction
 				if (!bomb.activ) {
-					print_index();
+					//print_index();
 					// Umrechnung zwischen Grad und Radiant
 					var r = ((ship.richtung + 90) * 3.14) / 180;
 					bombe ++;
@@ -89,7 +99,7 @@ public class GameDemo : Object {
 					engine.sprites.add (bomb);
 					item_index = engine.sprites.index_of (bomb);
 					bomb.index=item_index;
-					print_index();
+					//print_index();
 					engine.sounds[0].play ();
 				}
 			}
@@ -97,20 +107,20 @@ public class GameDemo : Object {
 			
 			if (ship.dead && !ship.pause && !exp.activ) {
 				
-					print_index();
+				//print_index();
 				print ("Ship died\n");
 				engine.sounds[2].play ();
 				 exp.activ=true;
-				life++;
-				text.life=life;
-				text.update();
+				//life++;
+				//text.life=life;
+				//text.update();
 				ship.pause = true;
 				exp.x = ship.x;
 				exp.y = ship.y;
 				var index = engine.sprites.index_of (ship);
 				exp.index=index;
 				engine.sprites.set (index,exp);
-					print_index();
+					//print_index();
 				exp.animation_start(0, 15, 60);
 					engine.add_timer(() => {
 					ship.fired=false;
@@ -120,7 +130,7 @@ public class GameDemo : Object {
 					ship.x = engine.width/2;
 					ship.y = engine.height/2;
 					engine.sprites.set (exp.index,ship);
-					print_index();
+					//print_index();
 					ship.pause = false;
 					ship.dead = false;
 					exp.activ = false;
@@ -140,15 +150,15 @@ public class GameDemo : Object {
 				text.hit=hit;
 				text.update();
 				engine.sounds[1].play ();
-					print_index();
+					//print_index();
 				if (bomb_index>index){
 				engine.sprites.remove (bomb);
-					print_index();
+					//print_index();
 				engine.sprites.remove (r);
 				}
 				else {
 				engine.sprites.remove (r);
-					print_index();
+					//print_index();
 				engine.sprites.remove (bomb);
 				}
 				rocks.remove_at (bomb.rock_index); 
@@ -162,18 +172,17 @@ public class GameDemo : Object {
 				ship.rocks.remove_at (bomb.rock_index);
 				bomb.explosion=false;
 				print("ROCK and Bomb exploding\n");
-					print_index();
+					//print_index();
 			}
 			if (bomb.out_of_screen){
 				print("Bomb out of screen "+bomb.index.to_string()+"\n");
-					print_index();
+					//print_index();
 				bomb.x=0;
 				bomb.y=0;
 				bomb.out_of_screen=false;
 				engine.sprites.remove  (bomb);
 				ship.fired=false;
-				
-					print_index();
+				//print_index();
 				}
 			
 			if (bomb.game_over){
