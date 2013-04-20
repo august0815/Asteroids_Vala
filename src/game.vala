@@ -65,20 +65,10 @@ public class GameDemo : Object {
 		// If defined inside the anon on score function
 		// you'd get a segment fault :(
 		state.on_score = () => {
-		
-			//print(bomb.out_of_screen.to_string()+"\n");
 			// some event fired !
 			if (ship.move){
 			text.fuel=(int)ship.fuel;
 			text.update();
-		/*	plasma.x=ship.x;
-			plasma.y=ship.y;
-			plasma.rotation=ship.rotation;
-             engine.sprites.add (plasma);
-             engine.add_timer(() => {
-				 ship.plasma=false;
-				  engine.sprites.remove (plasma);
-			}, 50);*/
 			ship.move=false;
 			}
 			if (ship.fired) {
@@ -98,11 +88,8 @@ public class GameDemo : Object {
 					print("Bomb fires\n");
 					engine.sprites.add (bomb);
 					item_index = engine.sprites.index_of (bomb);
-					//print("ITEM '%s' has Indexnumber %d\n", bomb.id,item_index);
 					bomb.index=item_index;
 					print_index();
-					//item_index = engine.sprites.index_of (ship);
-					//print("ITEM '%s' has Indexnumber %d\n", ship.id,item_index);
 					engine.sounds[0].play ();
 				}
 			}
@@ -121,43 +108,19 @@ public class GameDemo : Object {
 				exp.x = ship.x;
 				exp.y = ship.y;
 				var index = engine.sprites.index_of (ship);
-				//engine.sprites.remove (ship);
-				//engine.sprites.add (exp);
+				exp.index=index;
 				engine.sprites.set (index,exp);
 					print_index();
-				//exp.index = engine.sprites.index_of (exp);
-				//print("ITEM '%s' has Indexnumber %d\n", exp.id,item_index);
 				exp.animation_start(0, 15, 60);
-				
-					print_index();
-				//item_index = engine.sprites.index_of (ship);
-				//print("Remove ITEM '%s' has Indexnumber %d\n", ship.id,item_index);
-				//engine.remove_sprite (ship);
-				
-				
-					print_index();
-				
-					print_index();
-				engine.add_timer(() => {
+					engine.add_timer(() => {
 					ship.fired=false;
 					print("Animation Ends"+"\n");
 					exp.activ=false;
 					exp.animation_stop();
-					//item_index = engine.sprites.index_of (exp);
-					//print("Remove ITEM '%s' has Indexnumber %d\n", exp.id,item_index);
-					
-					print_index();
-					engine.sprites.remove (exp);
-					
-					print_index();
-					//engine.remove_sprite (exp);
 					ship.x = engine.width/2;
 					ship.y = engine.height/2;
-					engine.sprites.add (ship);
-					
+					engine.sprites.set (exp.index,ship);
 					print_index();
-					// item_index = engine.sprites.index_of (ship);
-					//print("ITEM '%s' has Indexnumber %d\n", ship.id,item_index);
 					ship.pause = false;
 					ship.dead = false;
 					exp.activ = false;
@@ -166,44 +129,48 @@ public class GameDemo : Object {
 			}
 			
 			if (bomb.explosion) {
-				bomb.x = 10000;
-				bomb.y = 10000;
+				bomb.x = 0;
+				bomb.y = 0;
 				print ("Bomb Exploded\n");
-				//item_index = engine.sprites.index_of (bomb);
-				//print("Remove ITEM '%s' has Indexnumber %d\n", bomb.id,item_index);
-				//engine.remove_sprite (bomb);
-				
-					print_index();
-				engine.sprites.remove (bomb);
-				
-					print_index();
+				var index = bomb.rock_index;
+				var r = rocks.get (index);
+				item_index = engine.sprites.index_of (r);
+				var bomb_index=engine.sprites.index_of (bomb);
 				hit++;
 				text.hit=hit;
 				text.update();
 				engine.sounds[1].play ();
-				var index = bomb.rock_index;
-				var r = rocks.get (index);
-				item_index = engine.sprites.index_of (r);
-				//	print("Remove ITEM '%s' has Indexnumber %d\n", r.id,item_index);
+					print_index();
+				if (bomb_index>index){
+				engine.sprites.remove (bomb);
+					print_index();
 				engine.sprites.remove (r);
+				}
+				else {
+				engine.sprites.remove (r);
+					print_index();
+				engine.sprites.remove (bomb);
+				}
 				rocks.remove_at (bomb.rock_index); 
 				bomb.rocks.remove_at (bomb.rock_index);
+				int rs=bomb.rocks.size;
+					if (rs==0){
+					// all ? 
+					bomb.game_over=true;
+					//gamestate.fire_score ();
+					}
 				ship.rocks.remove_at (bomb.rock_index);
 				bomb.explosion=false;
-				
+				print("ROCK and Bomb exploding\n");
 					print_index();
 			}
 			if (bomb.out_of_screen){
-				print("Bomb out of screen\n");
-				//item_index = engine.sprites.index_of (bomb);
-				//	print("Remove ITEM '%s' has Indexnumber %d , %d\n", bomb.id,item_index,bomb.idd);
-			
+				print("Bomb out of screen "+bomb.index.to_string()+"\n");
 					print_index();
 				bomb.x=0;
 				bomb.y=0;
 				bomb.out_of_screen=false;
-				//engine.remove_sprite  (bomb);
-				engine.sprites.remove_at (bomb.index);
+				engine.sprites.remove  (bomb);
 				ship.fired=false;
 				
 					print_index();
@@ -252,9 +219,8 @@ public class GameDemo : Object {
 	foreach(var s in engine.sprites){
 		var item_index = engine.sprites.index_of (s);
 		print("ITEM '%s' has Indexnumber %d\n", s.id,item_index);
-		
-		
 		}
 		print("\n");
 	}
+	
 }

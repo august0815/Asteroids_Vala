@@ -91,9 +91,9 @@ public class Bomb : Darkcore.Sprite {
         }
         //how many rocks ?
         int rs=rocks.size;
-        if (rs==0){
+        if (game_over){
 			// all ? 
-			game_over=true;
+			//game_over=true;
 			gamestate.fire_score ();
 		}
 		// test collision against bomb <->all rock

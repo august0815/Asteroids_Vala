@@ -189,18 +189,17 @@ namespace Darkcore { public class Engine : Object {
     public void add_sprite (Sprite item) {
     	sprites.add (item);
     	var item_index = sprites.index_of (item);
-    	print("ITEM '%s' has Indexnumber %d\n", item.id,item_index);
     }
     
     public void remove_sprite (Sprite item) {
     	var item_index = sprites.index_of (item);
-    	print("Pending Delete '%s'has Indexnumber %d\n", item.id,item_index); 
+    	//print("Pending Delete '%s'has Indexnumber %d\n", item.id,item_index); 
     	
     	//-- Make sure we only need to remove it once.
     	if (remove_queue.index_of (item_index) > -1) {
         	remove_queue.add (sprites.index_of (item));
     	}
-    	print("Finish Delete \n");
+    	
     }
     
 
