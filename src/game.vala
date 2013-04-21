@@ -9,6 +9,7 @@ public class GameDemo : Object {
     public Fuel fuel;
     public Shild shild;
     public Life life;
+    public int lifes;
     public Torpedo torpedo;
     public Darkcore.Engine engine;
     
@@ -17,7 +18,7 @@ public class GameDemo : Object {
         engine = new Darkcore.Engine(1260, 960);
         var state = new GameState();
         int level=0;
-        
+        lifes=0;
         
         int bombe=0;
         int hit=0;
@@ -111,8 +112,8 @@ public class GameDemo : Object {
 				print ("Ship died\n");
 				engine.sounds[2].play ();
 				 exp.activ=true;
-				//life++;
-				//text.life=life;
+				lifes++;
+				life.update_life(lifes);
 				//text.update();
 				ship.pause = true;
 				exp.x = ship.x;
@@ -201,6 +202,11 @@ public class GameDemo : Object {
 					start_level(ref engine ,level);
 					ship.levelup();
 				}
+			}
+			if (life.game_over){
+				print ("you loser");
+				life.game_over=false;
+				lifes=0;
 			}
 		};
         
