@@ -69,17 +69,17 @@ public class Ship : Darkcore.Sprite {
 		var gamestate = (GameState) world.gamestate;
 		 // keyspressed?
         if ((up == "up" && world.keys.up || up == "w" && world.keys.w) && (fuel>0)&&!move) {
-            animate(4);
+            animate(3);
         }
         if ((down == "down" && world.keys.down || down == "s" && world.keys.s) && (fuel>0)&&!move) {
            
-            animate(-4);
+            animate(-3);
           }
         if ((right == "right" && world.keys.right || right == "d" && world.keys.w) && (fuel>0)&&!move) {
-            rot = -0.4;
+            rot = -2;
 			}
         if ((left == "left" && world.keys.left || left == "a" && world.keys.s) && (fuel>0)&&!move) {
-            rot = 0.4;
+            rot = 2;
             }
         if ((space == "space" && world.keys.space)  ) {
             fired=true;
