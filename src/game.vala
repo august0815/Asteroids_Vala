@@ -9,6 +9,8 @@ public class GameDemo : Object {
     public Fuel fuel;
     public Shild shild;
     public Life life;
+    public Welcome welcome;
+    public GameOver over;
     public int lifes;
     public Torpedo torpedo;
     public Darkcore.Engine engine;
@@ -35,51 +37,63 @@ public class GameDemo : Object {
         var bg=new Background (ref engine);
         engine.sprites.add (bg);
         var item_index = engine.sprites.index_of (bg);
-    	//print("ITEM '%s' has Indexnumber %d\n", bg.id,item_index);
-        // Add an event to the renderer
-        engine.add_event(Darkcore.EventTypes.Render, () => {
+    	engine.add_event(Darkcore.EventTypes.Render, () => {
             });
+           
         // display some game variables
         var text = new FPSText.from_texture(engine, 0, ref level,  ref bombe, ref hit);
         text.set_text (""); // Testing
         //is this needed??
         //text.x = 0;//why ??
-        //engine.sprites.add (text);
-        //StatusDisplay
-        fuel=new Fuel (ref engine);
-        engine.sprites.add (fuel); 
-        shild=new Shild (ref engine);
-        engine.sprites.add (shild); 
-        life=new Life (ref engine);
-        engine.sprites.add (life);
-        torpedo=new Torpedo (ref engine);
-        engine.sprites.add (torpedo);
-       
-        ship = new Ship (ref engine);
-		exp= new Exp (ref engine);
-		//plasma = new Plasma (ref engine);
-		engine.sprites.add (ship); 
-		 item_index = engine.sprites.index_of (ship);
-    	print("ITEM '%s' has Indexnumber %d\n", ship.id,item_index);
-		bomb = new Bomb (ref engine);
+        engine.sprites.add (text);
+         welcome=new Welcome (ref engine);
+        engine.sprites.add (welcome);
+		over= new GameOver (ref engine);
+        
 		
-        start_level(ref engine , 0);
-        state.bomb = bomb;
-		state.ship = ship;
-		//is this needed??
-		foreach (Rock r in rocks) {
-			state.rock = r;
-		}
+		
 		
 
 		// This must be defined outside the score event
 		// If defined inside the anon on score function
 		// you'd get a segment fault :(
 		state.on_score = () => {
+			if (welcome.welcome_done && welcome.activ){
+			engine.sprites.remove (welcome);
+			welcome.welcome_done=false;
+			welcome.activ=false;
+			engine.sprites.remove (text);
+			//StatusDisplay
+			fuel=new Fuel (ref engine);
+			engine.sprites.add (fuel); 
+			shild=new Shild (ref engine);
+			engine.sprites.add (shild); 
+			life=new Life (ref engine);
+			engine.sprites.add (life);
+			torpedo=new Torpedo (ref engine);
+			engine.sprites.add (torpedo);
+			
+			ship = new Ship (ref engine);
+			exp= new Exp (ref engine);
+			engine.sprites.add (ship); 
+			item_index = engine.sprites.index_of (ship);
+			print("ITEM '%s' has Indexnumber %d\n", ship.id,item_index);
+			bomb = new Bomb (ref engine);
+			
+			start_level(ref engine , 0);
+			state.bomb = bomb;
+			state.ship = ship;
+			//is this needed??
+			foreach (Rock r in rocks) {
+				state.rock = r;
+				}
+			
+			}
+			
 			// some event fired !
 			if (ship.move){
 			text.fuel=(int)ship.fuel;
-			text.update();
+			//text.update();
 			ship.move=false;
 			}
 			if (ship.fired) {
@@ -90,7 +104,7 @@ public class GameDemo : Object {
 					var r = ((ship.richtung + 90) * 3.14) / 180;
 					bombe ++;
 					text.bombe=bombe;
-					text.update();
+					//text.update();
 					bomb.velocity_x = Math.cos (r)*10;
 					bomb.velocity_y = Math.sin (r)*10;
 					bomb.x = ship.x;
@@ -149,7 +163,7 @@ public class GameDemo : Object {
 				var bomb_index=engine.sprites.index_of (bomb);
 				hit++;
 				text.hit=hit;
-				text.update();
+				//text.update();
 				engine.sounds[1].play ();
 					//print_index();
 				if (bomb_index>index){
@@ -188,26 +202,37 @@ public class GameDemo : Object {
 			
 			if (bomb.game_over){
 				level++;
-				if (level>4){
+				if (level>0){
 				ship.fired=false;
 				engine.sprites.remove (ship);
+				engine.done=true;
+				print ("Done true\n");
 				//engine.sprites.remove (text);
 				text.aktuell="G A M E  O V E R : YOU WIN";
 				//engine.sprites.add (text);
 				}
 				else {
 					text.level=level;
-					text.update();
+					//text.update();
 					bomb.game_over=false;
 					start_level(ref engine ,level);
 					ship.levelup();
 				}
 			}
-			if (life.game_over){
-				print ("you loser");
-				life.game_over=false;
-				lifes=0;
+			if (life.game_over&&over.activ){
+				print ("you loser\n");
+				
+				engine.sprites.add (over);
+				over.activ=false;
+				ship.fuel=0;
+				bomb.activ = true;
+				//life.animate_tile(0,5); //TODO
+				engine.add_timer(() => {
+				engine.done=true;
+				}, 5000);
+				print ("Done true\n");
 			}
+			
 		};
         
         engine.gamestate = state;
@@ -237,5 +262,9 @@ public class GameDemo : Object {
 		}
 		print("\n");
 	}
+	
+		
+        
+		
 	
 }

@@ -36,6 +36,8 @@ FILES = \
     src/fuel.vala \
     src/life.vala \
     src/torpedo.vala \
+    src/welcome.vala \
+    src/game_over.vala \
     src/explosion.vala
 
 ifeq ($(OS),WIN32)
