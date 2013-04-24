@@ -14,7 +14,7 @@ public class FPSText : Darkcore.SpriteNS.Text {
         this.bombe = bombe;
         this.hit = hit;
         this.id = "TEXT";
-        this.aktuell="      Press space to start !!";
+        this.aktuell="      Press 'a' to start !!";
     }
     
     public override void on_render (uint32 ticks) {

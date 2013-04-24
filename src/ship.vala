@@ -5,10 +5,11 @@ public class Ship : Darkcore.Sprite {
     public string left { get; set; default = "left"; }
     public string right { get; set; default = "right"; }
     public string space { get; set; default = "space"; }
-    public string b { get; set; default = "b"; }
+    public string lf { get; set; default = "w"; }
     public double rot=0;
     public double richtung;
     public bool fired=false;
+    public bool laser_fired=false;
     public ArrayList<Rock> rocks;
     public bool dead=false;
     public bool pause=false;
@@ -82,12 +83,12 @@ public class Ship : Darkcore.Sprite {
             rot = 2;
             }
         if ((space == "space" && world.keys.space)  ) {
-            fired=true;
+            laser_fired=true;
             gamestate.fire_score ();
-            fired=false;
+            laser_fired=false;
         }
-        if ((b == "b" && world.keys.b)  ) {
-            fired=true;
+        if ((lf == "w" && world.keys.w)  ) {
+			fired=true;
             gamestate.fire_score ();
             fired=false;
         }

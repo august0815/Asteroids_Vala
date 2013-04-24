@@ -28,6 +28,7 @@ FILES = \
     src/ship.vala \
     src/gamestat.vala \
     src/bomb.vala \
+    src/laser.vala \
     src/rock.vala \
     src/game.vala \
     src/bg.vala \
