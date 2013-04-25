@@ -102,7 +102,7 @@ public class GameDemo : Object {
 			}
 			if (ship.fired) {
 			// display bomb  in the given direction
-				if (!bomb.activ) {
+				if (!bomb.activ && !laser.activ) {
 					//print_index();
 					// Umrechnung zwischen Grad und Radiant
 					var r = ((ship.richtung + 90) * 3.14) / 180;
@@ -124,15 +124,15 @@ public class GameDemo : Object {
 			}
 			if (ship.laser_fired) {
 			// display bomb  in the given direction
-				if (!laser.activ) {
+				if (!laser.activ && !bomb.activ) {
 					//print_index();
 					// Umrechnung zwischen Grad und Radiant
 					var r = ((ship.richtung + 90) * 3.14) / 180;
 					//bombe ++;
 					//text.bombe=bombe;
 					//text.update();
-					laser.velocity_x = Math.cos (r)*30;
-					laser.velocity_y = Math.sin (r)*30;
+					laser.velocity_x = Math.cos (r)*35;
+					laser.velocity_y = Math.sin (r)*35;
 					laser.x = ship.x;
 					laser.y = ship.y;
 					laser.rotation=ship.rotation;
@@ -207,6 +207,7 @@ public class GameDemo : Object {
 				bomb.rocks.remove_at (bomb.rock_index);
 				laser.rocks.remove_at (bomb.rock_index);
 				int rs=bomb.rocks.size;
+				print("Rocksize"+rs.to_string()+"\n");
 					if (rs==0){
 					// all ? 
 					bomb.game_over=true;
@@ -220,7 +221,7 @@ public class GameDemo : Object {
 			if (laser.explosion) {
 				laser.x = 0;
 				laser.y = 0;
-				print ("Bomb Exploded\n");
+				print ("Laser Exploded\n");
 				var index = laser.rock_index;
 				var r = rocks.get (index);
 				item_index = engine.sprites.index_of (r);
@@ -244,39 +245,52 @@ public class GameDemo : Object {
 					//print_index();
 				engine.sprites.remove (laser);
 				}
-			}
 				rocks.remove_at (laser.rock_index); 
 				laser.rocks.remove_at (laser.rock_index);
 				bomb.rocks.remove_at (laser.rock_index);
+				ship.rocks.remove_at (laser.rock_index);
+				
+				} else {
+				engine.sprites.remove (laser);
+				}
+				
 				int rs=laser.rocks.size;
+				print("Rocksize"+rs.to_string()+"\n");
 					if (rs==0){
 					// all ? 
-					laser.game_over=true;
+					bomb.game_over=true;
 					//gamestate.fire_score ();
 					}
-				ship.rocks.remove_at (laser.rock_index);
+				
 				laser.explosion=false;
-				print("ROCK and Bomb exploding\n");
+				print("ROCK and Laser exploding\n");
 					//print_index();
 			}
 			if (bomb.out_of_screen){
 				print("Bomb out of screen "+bomb.index.to_string()+"\n");
-					//print_index();
+				//	print_index();
 				bomb.x=0;
 				bomb.y=0;
 				bomb.out_of_screen=false;
-				engine.sprites.remove  (bomb);
+				//var bomb_index=engine.sprites.index_of (bomb);
+				
+				engine.sprites.remove(bomb);
 				ship.fired=false;
+				bomb.activ=false;
+				
 				//print_index();
 				}
 			if (laser.out_of_screen){
-				print("Bomb out of screen "+bomb.index.to_string()+"\n");
-					//print_index();
+				print("laser out of screen "+laser.index.to_string()+"\n");
+				//	print_index();
 				laser.x=0;
 				laser.y=0;
 				laser.out_of_screen=false;
-				engine.sprites.remove  (laser);
+				//var laser_index=engine.sprites.index_of (laser);
+				engine.sprites.remove(laser);
 				ship.laser_fired=false;
+				laser.activ=false;
+				
 				//print_index();
 				}
 			

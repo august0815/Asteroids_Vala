@@ -49,21 +49,20 @@ public class Laser : Darkcore.Sprite {
         return hit;
     }
     public override void on_render (uint32 ticks) {
+		if(activ){
 		var gamestate = (GameState) world.gamestate;
 		var half_height = height / 2.00;
         var half_width = width / 2.00;
-        // test if bomb is running out of screen ?
+        // test if laser is running out of screen ?
         if (y + half_height + velocity_y >= world.height) {
-			activ=false;
 			out_of_screen=true;
 			this.x = 0;
 			this.y = 0;
 			gamestate.fire_score ();
 			// world.remove_sprite (this);
-			 //print ("Bomb Fell Off Screen\n");
+			 //print ("Laser Fell Off Screen\n");
 			}
         else if (y - half_height - velocity_y <= 0) {
-			activ=false;
 			out_of_screen=true;
 			this.x = 0;
 			this.y = 0;
@@ -72,7 +71,6 @@ public class Laser : Darkcore.Sprite {
 			// print ("Bomb Fell Off Screen\n");
         }
         else if (x + half_width + velocity_x >= world.width) {
-			activ=false;
 			out_of_screen=true;
 			this.x = 0;
 			this.y = 0;
@@ -81,7 +79,6 @@ public class Laser : Darkcore.Sprite {
 			// print ("Bomb Fell Off Screen\n");
         }
         else if (x - half_width - velocity_x <= 0) {
-			activ=false;
 			out_of_screen=true;
 			this.x = 0;
 			this.y = 0;
@@ -112,11 +109,11 @@ public class Laser : Darkcore.Sprite {
 			}
 			}
 		}
-		//move bomb 
+		//move laser 
         x += velocity_x;
         y += velocity_y;
         //rotation +=1;
-		
+	}
     
     }
     public void add_rock(Rock r){

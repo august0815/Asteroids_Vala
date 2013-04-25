@@ -10,7 +10,7 @@ public class Shild : Darkcore.Sprite {
          
     public Shild (ref Darkcore.Engine engine) {
         base.from_file (engine, "resources/RedBar.png");
-        this.id = "Fuel";
+        this.id = "Shild";
         this.width =390.00;
         this.height = 30.00;
         this.world = engine;

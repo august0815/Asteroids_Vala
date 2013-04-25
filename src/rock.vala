@@ -7,6 +7,7 @@ public class Rock : Darkcore.Sprite {
     public double rot=Random.int_range(5,30)/10;
     public int i;
     public int hitpoint;
+    public int size;
      
     public Rock (ref Darkcore.Engine engine,int level,int size) {
         var rock_sprite=engine.add_texture ("resources/rock.png");
@@ -20,6 +21,7 @@ public class Rock : Darkcore.Sprite {
         this.velocity_y = Random.int_range(30, 500+(100*level))/100;
         this.id = "Rock";
         this.hitpoint=size;
+        this.size=size;
     }
     
     public override void on_render (uint32 ticks) {

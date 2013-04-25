@@ -11,7 +11,7 @@ public class Life : Darkcore.Sprite {
          
     public Life (ref Darkcore.Engine engine) {
         base.from_file (engine, "resources/life.png");
-        this.id = "Fuel";
+        this.id = "Life";
         this.width =200.00;
         this.height = 60.00;
         this.world = engine;

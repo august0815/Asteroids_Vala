@@ -10,7 +10,7 @@ public class Torpedo : Darkcore.Sprite {
          
     public Torpedo (ref Darkcore.Engine engine) {
         base.from_file (engine, "resources/EmptyBar.png");
-        this.id = "Fuel";
+        this.id = "Torpedo";
         this.width =200.00;
         this.height = 60.00;
         this.world = engine;
