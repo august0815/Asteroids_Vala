@@ -11,13 +11,17 @@ public class Ship : Darkcore.Sprite {
     public bool fired=false;
     public bool laser_fired=false;
     public ArrayList<Rock> rocks;
+    public bool was_hit=false;
     public bool dead=false;
     public bool pause=false;
     public double fuel;
+    public double shild;
     public bool move;
     public bool flip;
     public double dx;
     public double dy;
+    public double velocity_x;
+    public double velocity_y;
          
     public Ship (ref Darkcore.Engine engine) {
 		base.from_file(engine ,"resources/ship.png");
@@ -31,6 +35,7 @@ public class Ship : Darkcore.Sprite {
         
         rocks=new  ArrayList<Rock> ();
         this.fuel=100;//prozent
+        this.shild=100;
         this.tile_width = 0.5;
         this.tile_height = 1;
         this.flip=true;
@@ -69,17 +74,17 @@ public class Ship : Darkcore.Sprite {
     public override void on_key_press() {
 		var gamestate = (GameState) world.gamestate;
 		 // keyspressed?
-        if ((up == "up" && world.keys.up || up == "w" && world.keys.w) && (fuel>0)&&!move) {
+        if ((up == "up" && world.keys.up || up == "w" && world.keys.w) && (fuel>0)&& !move && !was_hit) {
             animate(3);
         }
-        if ((down == "down" && world.keys.down || down == "s" && world.keys.s) && (fuel>0)&&!move) {
+        if ((down == "down" && world.keys.down || down == "s" && world.keys.s) && (fuel>0)&&!move && !was_hit) {
            
             animate(-3);
           }
-        if ((right == "right" && world.keys.right || right == "d" && world.keys.w) && (fuel>0)&&!move) {
+        if ((right == "right" && world.keys.right || right == "d" && world.keys.w) && (fuel>0)&&!move && !was_hit) {
             rot = -2;
 			}
-        if ((left == "left" && world.keys.left || left == "a" && world.keys.s) && (fuel>0)&&!move) {
+        if ((left == "left" && world.keys.left || left == "a" && world.keys.s) && (fuel>0)&&!move && !was_hit) {
             rot = 2;
             }
         if ((space == "space" && world.keys.space)  ) {
@@ -115,12 +120,43 @@ public class Ship : Darkcore.Sprite {
         rot=0;
         dx=0;dy=0;
 		}
+		if (was_hit){
+		var half_height = height / 2.00;
+        var half_width = width / 2.00;
+        // test if rock hits the screen border
+        if (y + half_height + velocity_y >= world.height) {
+            velocity_y = -Math.fabs(velocity_y);
+        }
+        if (y - half_height - velocity_y <= 0) {
+            velocity_y = Math.fabs(velocity_y);
+        }
+        if (x + half_width + velocity_x >= world.width) {
+            velocity_x = -Math.fabs(velocity_x);
+        }
+        if (x - half_width - velocity_x <= 0) {
+            velocity_x = Math.fabs(velocity_x);
+        }
+			x += velocity_x;
+			y += velocity_y;
+			rotation += 2;
+		
+		}
          
         foreach (Rock r in rocks){
-					
-			if (has_hit_rock (r) ){
-				dead=true;
+					//pause=true;
+			if (has_hit_rock (r) && !was_hit ){
+				shild=shild - r.size*25;
+				print("shild"+shild.to_string()+"\n");
+				velocity_x=r.velocity_x*0.35;
+				velocity_y=r.velocity_y*0.35;
+				r.velocity_x=r.velocity_x*-0.5;
+				r.velocity_y=r.velocity_y*-0.5;
+				if (shild<0){
+					dead=true;
+				}
+				was_hit=true;
 				gamestate.fire_score ();
+				
 			}
 		}
     }

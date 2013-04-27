@@ -35,6 +35,8 @@ FILES = \
     src/text.vala \
     src/shild.vala \
     src/fuel.vala \
+    src/reiter_fuel.vala \
+    src/reiter_shild.vala \
     src/life.vala \
     src/torpedo.vala \
     src/welcome.vala \

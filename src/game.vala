@@ -8,6 +8,8 @@ public class GameDemo : Object {
     public Bomb bomb;
     public Laser laser;
     public Fuel fuel;
+    public Reiter_fuel reiter_fuel;
+    public Reiter_shild reiter_shild;
     public Shild shild;
     public Life life;
     public Welcome welcome;
@@ -35,6 +37,8 @@ public class GameDemo : Object {
         engine.sounds.add (ship_explode);
         var ship_laser = new Darkcore.Sound ("resources/laser.ogg");
         engine.sounds.add (ship_laser);
+        var hit_sound = new Darkcore.Sound ("resources/hit.ogg");
+        engine.sounds.add (hit_sound);
 		// Load textures
         engine.add_texture ("resources/font.png");
         var bg=new Background (ref engine);
@@ -69,8 +73,12 @@ public class GameDemo : Object {
 			//StatusDisplay
 			fuel=new Fuel (ref engine);
 			engine.sprites.add (fuel); 
+			reiter_fuel=new Reiter_fuel (ref engine);
+			engine.sprites.add (reiter_fuel); 
 			shild=new Shild (ref engine);
 			engine.sprites.add (shild); 
+			reiter_shild=new Reiter_shild (ref engine);
+			engine.sprites.add (reiter_shild);
 			life=new Life (ref engine);
 			engine.sprites.add (life);
 			torpedo=new Torpedo (ref engine);
@@ -84,7 +92,7 @@ public class GameDemo : Object {
 			bomb = new Bomb (ref engine);
 			laser= new Laser (ref engine);
 			
-			start_level(ref engine , 0);
+			start_level( 0);
 			state.bomb = bomb;
 			state.ship = ship;
 			//is this needed??
@@ -96,8 +104,8 @@ public class GameDemo : Object {
 			
 			// some event fired !
 			if (ship.move){
-			text.fuel=(int)ship.fuel;
-			//text.update();
+			reiter_fuel.fuel=ship.fuel;
+			
 			ship.move=false;
 			}
 			if (ship.fired) {
@@ -125,7 +133,7 @@ public class GameDemo : Object {
 			if (ship.laser_fired) {
 			// display bomb  in the given direction
 				if (!laser.activ && !bomb.activ) {
-					//print_index();
+					print_index();
 					// Umrechnung zwischen Grad und Radiant
 					var r = ((ship.richtung + 90) * 3.14) / 180;
 					//bombe ++;
@@ -141,7 +149,7 @@ public class GameDemo : Object {
 					engine.sprites.add (laser);
 					item_index = engine.sprites.index_of (laser);
 					laser.index=item_index;
-					//print_index();
+					print_index();
 					engine.sounds[3].play ();
 				}
 			}
@@ -174,11 +182,21 @@ public class GameDemo : Object {
 					engine.sprites.set (exp.index,ship);
 					//print_index();
 					ship.pause = false;
-					ship.dead = false;
+					ship.was_hit = false;
+					ship.dead=false;
+					ship.shild=100;
 					exp.activ = false;
 				}, 500);
-				
+			
 			}
+			if (ship.was_hit && !ship.pause && !exp.activ && !ship.dead) {
+				reiter_shild.shild=ship.shild;
+				engine.sounds[4].play ();
+				
+				engine.add_timer(() => {
+					ship.was_hit=false;
+					}, 1000);
+				}
 			
 			if (bomb.explosion) {
 				bomb.x = 0;
@@ -234,25 +252,28 @@ public class GameDemo : Object {
 				r.hitpoint --;
 				print("Hit.point"+r.hitpoint.to_string()+"\n");
 				if (r.hitpoint<1){
-				
-				if (laser_index>index){
-				engine.sprites.remove (laser);
+					if (laser_index>index){
+					engine.sprites.remove (laser);
 					//print_index();
-				engine.sprites.remove (r);
-				}
-				else {
-				engine.sprites.remove (r);
+					engine.sprites.remove (r);
+					}
+					else {
+					engine.sprites.remove (r);
 					//print_index();
-				engine.sprites.remove (laser);
-				}
-				rocks.remove_at (laser.rock_index); 
-				laser.rocks.remove_at (laser.rock_index);
-				bomb.rocks.remove_at (laser.rock_index);
-				ship.rocks.remove_at (laser.rock_index);
+					engine.sprites.remove (laser);
+					}
+					int size=rock.size;
+					
+					rocks.remove_at (laser.rock_index); 
+					laser.rocks.remove_at (laser.rock_index);
+					bomb.rocks.remove_at (laser.rock_index);
+					ship.rocks.remove_at (laser.rock_index);
+					
+					generate_rock (ref engine,level,2,size );
 				
 				} else {
-				engine.sprites.remove (laser);
-				}
+					engine.sprites.remove (laser);
+					}
 				
 				int rs=laser.rocks.size;
 				print("Rocksize"+rs.to_string()+"\n");
@@ -309,7 +330,7 @@ public class GameDemo : Object {
 					text.level=level;
 					//text.update();
 					bomb.game_over=false;
-					start_level(ref engine ,level);
+					start_level(level);
 					ship.levelup();
 				}
 			}
@@ -334,12 +355,16 @@ public class GameDemo : Object {
         engine.run ();
 
     }
-    public void start_level(ref Darkcore.Engine engine,int level){
-		int anzahl=2+(level*2);
+    public void start_level (int level){
+	var anz=2+(level*2);
+	var size=2+level;
+	 generate_rock(ref engine ,level,anz,size);
+	}
+    public void generate_rock(ref Darkcore.Engine engine,int level,int anzahl,int max_size){
 		//load the other sprites
 		// the rocks in an array
 		for (int j=0;j<anzahl;j++){
-			int size =Random.int_range(1,4);
+			int size =Random.int_range(1,max_size);
 			rock = new Rock (ref engine,level,size);
 			rock.i = j;
 			engine.sprites.add (rock);

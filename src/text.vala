@@ -3,7 +3,7 @@ public class FPSText : Darkcore.SpriteNS.Text {
   public int life;
   public int bombe;
   public int hit;
-  public int fuel;
+  //public int fuel;
   public string aktuell;
   
     public FPSText.from_texture(Darkcore.Engine world, int texture_index, 
