@@ -8,13 +8,11 @@ public class Background : Darkcore.Sprite {
         this.world = engine;
         this.width = 1260.00;
         this.height = 960.00;
-        this.x = this.width/2;//why??
-        this.y = this.height/2;//why??
+        this.x = this.width/2;
+        this.y = this.height/2;
         this.id = "Background";
     }
 
    
-    public override void on_render (uint32 ticks) {
-		
-   }   
+ 
 }

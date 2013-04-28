@@ -110,13 +110,12 @@ public class GameDemo : Object {
 			}
 			if (ship.fired) {
 			// display bomb  in the given direction
-				if (!bomb.activ && !laser.activ) {
+				if (!bomb.activ && !laser.activ && (bombe<8)) {
 					//print_index();
 					// Umrechnung zwischen Grad und Radiant
 					var r = ((ship.richtung + 90) * 3.14) / 180;
 					bombe ++;
-					text.bombe=bombe;
-					//text.update();
+					torpedo.update_bomb(bombe);
 					bomb.velocity_x = Math.cos (r)*10;
 					bomb.velocity_y = Math.sin (r)*10;
 					bomb.x = ship.x;
