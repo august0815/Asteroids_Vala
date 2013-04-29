@@ -23,12 +23,8 @@ public class Reiter_fuel : Darkcore.Sprite {
         public override void on_key_press() {
 		var fuelx=3.57*fuel;
 		x=890+fuelx;
-        
-       
-		}
-		
-			
-    }
+     	}
+	}
 
 
    

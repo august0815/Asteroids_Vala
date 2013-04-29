@@ -9,8 +9,8 @@ public class Rock : Darkcore.Sprite {
     public int hitpoint;
     public int size;
      
-    public Rock (ref Darkcore.Engine engine,int level,int size) {
-        var rock_sprite=engine.add_texture ("resources/rock.png");
+    public Rock (ref Darkcore.Engine engine,int level,int size,int i) {
+        var rock_sprite=1;//;engine.add_texture ("resources/rock.png");
         base.from_texture(engine ,rock_sprite);
         this.width = 32*size;
         this.height = 32*size;
@@ -19,9 +19,11 @@ public class Rock : Darkcore.Sprite {
         this.y = Random.int_range(1000, 90000)/100;
         this.velocity_x = Random.int_range(30, 500+(100*level))/100;
         this.velocity_y = Random.int_range(30, 500+(100*level))/100;
-        this.id = "Rock";
+        this.i=i;
+        this.id = "Rock"+i.to_string();
         this.hitpoint=size;
         this.size=size;
+        print("Rocksize in Rock "+this.size.to_string()+"\n");
     }
     
     public override void on_render (uint32 ticks) {

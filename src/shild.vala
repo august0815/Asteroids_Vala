@@ -14,20 +14,10 @@ public class Shild : Darkcore.Sprite {
         this.width =390.00;
         this.height = 30.00;
         this.world = engine;
-        this.x = 1070;//engine.width/2;
-        this.y = 35;//engine.height/2;
-        //this.tile_width = 0.25;
-        //this.tile_height = 0.25;
-		//anima_tile (0, 0);
-		
-      	 }  
-        public override void on_key_press() {
-		
+        this.x = 1070;;
+        this.y = 35;
+		}  
         
-       
-		}
-		
-			
     }
 
 

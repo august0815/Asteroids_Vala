@@ -15,10 +15,7 @@ public class GameOver: Darkcore.Sprite {
         this.activ=true;
         var gamestate = (GameState) world.gamestate;
       	 }  
-        public override void on_render(uint32 ticks) {
-		
-		}
-	
+       	
     }
 
 

@@ -16,15 +16,8 @@ public class Fuel : Darkcore.Sprite {
         this.world = engine;
         this.x = 1070;
         this.y = 8;       
-		
-      	 }  
-        public override void on_key_press() {
-		
-        
+		 }  
        
-		}
-		
-			
     }
 
 

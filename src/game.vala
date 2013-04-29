@@ -17,12 +17,13 @@ public class GameDemo : Object {
     public int lifes;
     public Torpedo torpedo;
     public Darkcore.Engine engine;
-    
+    public int level=0;
+    public int rockindex=0;
     public ArrayList<Rock> rocks=new  ArrayList<Rock> ();
     public GameDemo(){
         engine = new Darkcore.Engine(1260, 960);
         var state = new GameState();
-        int level=0;
+        
         lifes=0;
         
         int bombe=0;
@@ -41,6 +42,7 @@ public class GameDemo : Object {
         engine.sounds.add (hit_sound);
 		// Load textures
         engine.add_texture ("resources/font.png");
+        engine.add_texture ("resources/rock.png");
         var bg=new Background (ref engine);
         engine.sprites.add (bg);
         var item_index = engine.sprites.index_of (bg);
@@ -65,6 +67,7 @@ public class GameDemo : Object {
 		// If defined inside the anon on score function
 		// you'd get a segment fault :(
 		state.on_score = () => {
+			print_index();
 			if (welcome.welcome_done && welcome.activ){
 			engine.sprites.remove (welcome);
 			welcome.welcome_done=false;
@@ -108,7 +111,7 @@ public class GameDemo : Object {
 			
 			ship.move=false;
 			}
-			if (ship.fired) {
+			if (ship.fired && !ship.was_hit) {
 			// display bomb  in the given direction
 				if (!bomb.activ && !laser.activ && (bombe<8)) {
 					//print_index();
@@ -132,7 +135,7 @@ public class GameDemo : Object {
 			if (ship.laser_fired) {
 			// display bomb  in the given direction
 				if (!laser.activ && !bomb.activ) {
-					print_index();
+					//print_index();
 					// Umrechnung zwischen Grad und Radiant
 					var r = ((ship.richtung + 90) * 3.14) / 180;
 					//bombe ++;
@@ -148,13 +151,13 @@ public class GameDemo : Object {
 					engine.sprites.add (laser);
 					item_index = engine.sprites.index_of (laser);
 					laser.index=item_index;
-					print_index();
+					//print_index();
 					engine.sounds[3].play ();
 				}
 			}
 			
 			
-			if (ship.dead && !ship.pause && !exp.activ) {
+			if (ship.dead && !ship.pause && !exp.activ && !ship.was_hit) {
 				
 				//print_index();
 				print ("Ship died\n");
@@ -188,12 +191,14 @@ public class GameDemo : Object {
 				}, 500);
 			
 			}
-			if (ship.was_hit && !ship.pause && !exp.activ && !ship.dead) {
+			if (ship.was_hit  && !exp.activ && !ship.dead) {
 				reiter_shild.shild=ship.shild;
+				ship.pause=true;
 				engine.sounds[4].play ();
 				
 				engine.add_timer(() => {
 					ship.was_hit=false;
+					ship.pause=false;
 					}, 1000);
 				}
 			
@@ -224,7 +229,7 @@ public class GameDemo : Object {
 				bomb.rocks.remove_at (bomb.rock_index);
 				laser.rocks.remove_at (bomb.rock_index);
 				int rs=bomb.rocks.size;
-				print("Rocksize"+rs.to_string()+"\n");
+				print("ARRYGRÖ?ERocksize"+rs.to_string()+"\n");
 					if (rs==0){
 					// all ? 
 					bomb.game_over=true;
@@ -250,38 +255,46 @@ public class GameDemo : Object {
 					//print_index();
 				r.hitpoint --;
 				print("Hit.point"+r.hitpoint.to_string()+"\n");
-				if (r.hitpoint<1){
-					if (laser_index>index){
-					engine.sprites.remove (laser);
+				if (r.hitpoint==0){
+					//Rock splits or is removed
+					print("Hitpoint <1\n");
+					//	print("size>0 "+index.to_string()+"\n");
 					//print_index();
-					engine.sprites.remove (r);
+					if (laser_index>index){
+						engine.sprites.remove (laser);
+						engine.sprites.remove (r);
 					}
 					else {
+						engine.sprites.remove (r);
+						engine.sprites.remove (laser);
+					}
+					
+					if (r.size>1){
+					//split into two smaller  rocks
+					//and remove old rock
+					split_rock (ref engine,r,index);
+					}
+					else{
+					// to small to split , only remove
 					engine.sprites.remove (r);
-					//print_index();
-					engine.sprites.remove (laser);
-					}
-					int size=rock.size;
+					rocks.remove_at (index); 
+					laser.rocks.remove_at (index);
+					bomb.rocks.remove_at (index);
+					ship.rocks.remove_at (index);
 					
-					rocks.remove_at (laser.rock_index); 
-					laser.rocks.remove_at (laser.rock_index);
-					bomb.rocks.remove_at (laser.rock_index);
-					ship.rocks.remove_at (laser.rock_index);
-					
-					generate_rock (ref engine,level,2,size );
-				
-				} else {
-					engine.sprites.remove (laser);
 					}
 				
+					} else {
+					//only laser is removed
+					engine.sprites.remove (laser);
+					}
+				//Test if all rocks are destroyed
 				int rs=laser.rocks.size;
-				print("Rocksize"+rs.to_string()+"\n");
+				print("ArrygrößeROCKinlaser_explode"+rs.to_string()+"\n");
 					if (rs==0){
 					// all ? 
 					bomb.game_over=true;
-					//gamestate.fire_score ();
 					}
-				
 				laser.explosion=false;
 				print("ROCK and Laser exploding\n");
 					//print_index();
@@ -306,7 +319,6 @@ public class GameDemo : Object {
 				laser.x=0;
 				laser.y=0;
 				laser.out_of_screen=false;
-				//var laser_index=engine.sprites.index_of (laser);
 				engine.sprites.remove(laser);
 				ship.laser_fired=false;
 				laser.activ=false;
@@ -356,16 +368,16 @@ public class GameDemo : Object {
     }
     public void start_level (int level){
 	var anz=2+(level*2);
-	var size=2+level;
-	 generate_rock(ref engine ,level,anz,size);
+	//var size=2+level;
+	 generate_rock(ref engine ,level,anz,5);
 	}
     public void generate_rock(ref Darkcore.Engine engine,int level,int anzahl,int max_size){
-		//load the other sprites
+		// load the other sprites
 		// the rocks in an array
 		for (int j=0;j<anzahl;j++){
 			int size =Random.int_range(1,max_size);
-			rock = new Rock (ref engine,level,size);
-			rock.i = j;
+			rockindex++;
+			rock = new Rock (ref engine,level,size,rockindex);
 			engine.sprites.add (rock);
 			var item_index = engine.sprites.index_of (rock);
 			print("ITEM '%s' has Indexnumber %d\n", rock.id,item_index);
@@ -375,6 +387,59 @@ public class GameDemo : Object {
 			laser.add_rock(rock);
 		}
 	}
+	public void split_rock(ref Darkcore.Engine engine,Rock old_rock,int index){
+		var size=old_rock.size;
+		print("MAKE ROCK\n");
+		print("Rocksize "+size.to_string()+"\n");
+		//print_index();
+		if (size>1){
+		var x=old_rock.x;
+		var y=old_rock.y;
+		var dx=old_rock.velocity_x;
+		var dy=old_rock.velocity_y;
+					//print("vor remove\n");
+					//print("INDEX "+index.to_string()+"\n");
+					//print_index();
+					engine.sprites.remove (old_rock);
+					rocks.remove_at (index); 
+					laser.rocks.remove_at (index);
+					bomb.rocks.remove_at (index);
+					ship.rocks.remove_at (index);print("nach remove\n");
+					//print_index();
+		size --;
+		print("Rocksize "+size.to_string()+"\n");
+		rockindex++;
+		rock = new Rock (ref engine,level,size,rockindex);
+		rock.x=x;
+		rock.y=y;
+		rock.velocity_x=dx*0.45;
+		rock.velocity_y=dy*0.45;
+		engine.sprites.add (rock);
+		var item_index = engine.sprites.index_of (rock);
+			print("ITEM '%s' has Indexnumber %d\n", rock.id,item_index);
+			rocks.add (rock);
+			ship.add_rock (rock);
+			bomb.add_rock (rock);
+			laser.add_rock(rock);
+			//print_index();
+			rockindex++;
+		rock = new Rock (ref engine,level,size,rockindex);
+		rock.x=x;
+		rock.y=y;
+		rock.velocity_x=-dx*0.45;
+		rock.velocity_y=-dy*0.45;
+		engine.sprites.add (rock);
+			item_index = engine.sprites.index_of (rock);
+			print("ITEM '%s' has Indexnumber %d\n", rock.id,item_index);
+			rocks.add (rock);
+			ship.add_rock (rock);
+			bomb.add_rock (rock);
+			laser.add_rock(rock);
+			//print_index();
+			}
+		//engine.sprites.remove (old_rock);
+		print("Rock Make ende\n");
+		}
 	public void print_index(){
 	foreach(var s in engine.sprites){
 		var item_index = engine.sprites.index_of (s);

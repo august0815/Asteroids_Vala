@@ -32,12 +32,12 @@ public class Laser : Darkcore.Sprite {
         var max_vector = new Darkcore.Vector(2);
         
         // Bottom Left
-        min_vector.set (0, sprite.x - (sprite.width / 5));
-        min_vector.set (1, sprite.y - (sprite.height / 5));
+        min_vector.set (0, sprite.x - (sprite.width / 2.5));
+        min_vector.set (1, sprite.y - (sprite.height / 2.5));
         
         // Top Right
-        max_vector.set (0, sprite.x + (sprite.width / 5));
-        max_vector.set (1, sprite.y + (sprite.height / 5));
+        max_vector.set (0, sprite.x + (sprite.width / 2.5));
+        max_vector.set (1, sprite.y + (sprite.height / 2.5));
         
         var hit = Darkcore.Collision.circle_in_rectangle (
             min_vector,

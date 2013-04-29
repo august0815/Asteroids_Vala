@@ -82,17 +82,17 @@ public class Ship : Darkcore.Sprite {
             animate(-3);
           }
         if ((right == "right" && world.keys.right || right == "d" && world.keys.w) && (fuel>0)&&!move && !was_hit) {
-            rot = -2;
+            rot = -1.5;
 			}
         if ((left == "left" && world.keys.left || left == "a" && world.keys.s) && (fuel>0)&&!move && !was_hit) {
-            rot = 2;
+            rot = 1.5;
             }
-        if ((space == "space" && world.keys.space)  ) {
+        if ((space == "space" && world.keys.space && !was_hit)  ) {
             laser_fired=true;
             gamestate.fire_score ();
             laser_fired=false;
         }
-        if ((lf == "w" && world.keys.w)  ) {
+        if ((lf == "w" && world.keys.w && !was_hit)  ) {
 			fired=true;
             gamestate.fire_score ();
             fired=false;
