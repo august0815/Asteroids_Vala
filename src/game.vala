@@ -4,6 +4,7 @@ using Gee;
 public class GameDemo : Object {
     public Ship ship;
     public Exp exp;
+    public Ani1 ship_was_hit;
     public Rock rock;
     public Bomb bomb;
     public Laser laser;
@@ -67,7 +68,7 @@ public class GameDemo : Object {
 		// If defined inside the anon on score function
 		// you'd get a segment fault :(
 		state.on_score = () => {
-			print_index();
+			
 			if (welcome.welcome_done && welcome.activ){
 			engine.sprites.remove (welcome);
 			welcome.welcome_done=false;
@@ -89,6 +90,7 @@ public class GameDemo : Object {
 			
 			ship = new Ship (ref engine);
 			exp= new Exp (ref engine);
+			ship_was_hit= new Ani1 (ref engine);
 			engine.sprites.add (ship); 
 			item_index = engine.sprites.index_of (ship);
 			print("ITEM '%s' has Indexnumber %d\n", ship.id,item_index);
@@ -157,7 +159,7 @@ public class GameDemo : Object {
 			}
 			
 			
-			if (ship.dead && !ship.pause && !exp.activ && !ship.was_hit) {
+			if (ship.dead  && !exp.activ && ship.was_hit) {
 				
 				//print_index();
 				print ("Ship died\n");
@@ -191,15 +193,34 @@ public class GameDemo : Object {
 				}, 500);
 			
 			}
-			if (ship.was_hit  && !exp.activ && !ship.dead) {
+			if (ship.was_hit  && ship.pause && !exp.activ && !ship.dead) {
 				reiter_shild.shild=ship.shild;
-				ship.pause=true;
-				engine.sounds[4].play ();
 				
-				engine.add_timer(() => {
-					ship.was_hit=false;
-					ship.pause=false;
-					}, 1000);
+				engine.sounds[4].play ();
+				ship.pause = true;
+				ship_was_hit.x = ship.x;
+				ship_was_hit.y = ship.y;
+				var index = engine.sprites.index_of (ship);
+				ship_was_hit.index=index;
+				engine.sprites.set (index,ship_was_hit);
+					//print_index();
+				ship_was_hit.animation_start(0, 3, 60);
+					engine.add_timer(() => {
+					ship.fired=false;
+					print("Animation Ends"+"\n");
+					ship_was_hit.activ=false;
+					ship_was_hit.animation_stop();
+					ship.x = ship_was_hit.x;
+					ship.y = ship_was_hit.y;
+					engine.sprites.set (ship_was_hit.index,ship);
+					//print_index();
+					ship.pause = false;
+					ship.was_hit = false;
+					ship.dead=false;
+					//ship.shild=100;
+					ship_was_hit.activ = false;
+					}, 500);
+				
 				}
 			
 			if (bomb.explosion) {
@@ -346,7 +367,7 @@ public class GameDemo : Object {
 				}
 			}
 			if (life.game_over&&over.activ){
-				print ("you loser\n");
+				print ("you lost\n");
 				
 				engine.sprites.add (over);
 				over.activ=false;
