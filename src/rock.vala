@@ -23,7 +23,7 @@ public class Rock : Darkcore.Sprite {
         this.id = "Rock"+i.to_string();
         this.hitpoint=size;
         this.size=size;
-        print("Rocksize in Rock "+this.size.to_string()+"\n");
+        //print("Rocksize in Rock "+this.size.to_string()+"\n");
     }
     
     public override void on_render (uint32 ticks) {

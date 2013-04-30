@@ -118,6 +118,7 @@ public class Laser : Darkcore.Sprite {
     }
     public void add_rock(Rock r){
 		rocks.add(r);
+		//world.ship.fired=false;
 	}
    
 }

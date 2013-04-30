@@ -22,6 +22,8 @@ public class Ship : Darkcore.Sprite {
     public double dy;
     public double velocity_x;
     public double velocity_y;
+    
+    
          
     public Ship (ref Darkcore.Engine engine) {
 		base.from_file(engine ,"resources/ship.png");
@@ -127,7 +129,7 @@ public class Ship : Darkcore.Sprite {
 			if (has_hit_rock (r) && !was_hit ){
 				pause=true;
 				shild=shild - r.size*25;
-				print("shild"+shild.to_string()+"\n");
+				//print("shild"+shild.to_string()+"\n");
 				//we nees only the signum of the rock velocity
 				x=x+Math.copysign(1,r.velocity_x)*30;
 				y=y+Math.copysign(1,r.velocity_y)*30;
