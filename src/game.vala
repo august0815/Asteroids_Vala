@@ -386,7 +386,7 @@ public class GameDemo : Object {
     public void start_level (int level){
 	var anz=2+(level*2);
 	//var size=2+level;
-	 generate_rock(ref engine ,level,anz,5);
+	 generate_rock(ref engine ,level,1,1);
 	}
     public void generate_rock(ref Darkcore.Engine engine,int level,int anzahl,int max_size){
 		// load the other sprites

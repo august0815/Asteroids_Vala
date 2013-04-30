@@ -15,10 +15,10 @@ public class Rock : Darkcore.Sprite {
         this.width = 32*size;
         this.height = 32*size;
         this.world = engine;
-        this.x = Random.int_range(1000, 90000)/100;;
-        this.y = Random.int_range(1000, 90000)/100;
-        this.velocity_x = Random.int_range(30, 500+(100*level))/100;
-        this.velocity_y = Random.int_range(30, 500+(100*level))/100;
+        this.x = 100;//engine.width/2;
+        this.y = engine.height/2;
+        this.velocity_x = 5;//;Random.int_range(30, 500+(100*level))/100;
+        this.velocity_y =0;// Random.int_range(30, 500+(100*level))/100;
         this.i=i;
         this.id = "Rock"+i.to_string();
         this.hitpoint=size;

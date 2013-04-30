@@ -78,17 +78,17 @@ public class Ship : Darkcore.Sprite {
 		var gamestate = (GameState) world.gamestate;
 		 // keyspressed?
         if ((up == "up" && world.keys.up || up == "w" && world.keys.w) && (fuel>0)&& !move && !was_hit) {
-            animate(3);
+           // animate(3);
         }
         if ((down == "down" && world.keys.down || down == "s" && world.keys.s) && (fuel>0)&&!move && !was_hit) {
            
-            animate(-3);
+            //animate(-3);
           }
         if ((right == "right" && world.keys.right || right == "d" && world.keys.w) && (fuel>0)&&!move && !was_hit) {
-            rot = -1.5;
+            //rot = -1.5;
 			}
         if ((left == "left" && world.keys.left || left == "a" && world.keys.s) && (fuel>0)&&!move && !was_hit) {
-            rot = 1.5;
+            //rot = 1.5;
             }
         if ((space == "space" && world.keys.space && !was_hit && !pause)  ) {
             laser_fired=true;
@@ -96,9 +96,9 @@ public class Ship : Darkcore.Sprite {
             laser_fired=false;
         }
         if ((lf == "w" && world.keys.w && !was_hit && !pause)  ) {
-			fired=true;
-            gamestate.fire_score ();
-            fired=false;
+			//fired=true;
+            //gamestate.fire_score ();
+            //fired=false;
         }
         // in screen?
         if (this.x + dx + (width / 2) >= world.width) {
@@ -131,10 +131,10 @@ public class Ship : Darkcore.Sprite {
 				shild=shild - r.size*25;
 				//print("shild"+shild.to_string()+"\n");
 				//we nees only the signum of the rock velocity
-				x=x+Math.copysign(1,r.velocity_x)*30;
-				y=y+Math.copysign(1,r.velocity_y)*30;
-				r.velocity_x=r.velocity_x*-0.5;
-				r.velocity_y=r.velocity_y*-0.5;
+				//x=x+Math.copysign(1,r.velocity_x)*30;
+				//y=y+Math.copysign(1,r.velocity_y)*30;
+				r.velocity_x=r.velocity_x*-1;
+				//r.velocity_y=r.velocity_y*-0.5;
 				if (shild<0){
 					dead=true;
 				}
