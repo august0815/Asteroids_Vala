@@ -39,9 +39,12 @@ FILES = \
     src/reiter_shild.vala \
     src/life.vala \
     src/torpedo.vala \
-    src/welcome.vala \
     src/game_over.vala \
     src/ship_ani.vala \
+    src/option.vala \
+	src/help.vala \
+	src/start.vala \
+	src/top.vala \
     src/explosion.vala
 
 ifeq ($(OS),WIN32)

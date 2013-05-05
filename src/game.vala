@@ -13,6 +13,9 @@ public class GameDemo : Object {
     public Reiter_shild reiter_shild;
     public Shild shild;
     public Life life;
+    public Option option;
+    public Help help;
+    public Start start;
     public Welcome welcome;
     public GameOver over;
     public int lifes;
@@ -56,8 +59,14 @@ public class GameDemo : Object {
         var text = new FPSText.from_texture(engine, 0, ref level,  ref bombe, ref hit);
         text.set_text (""); // Testing
         //is this needed??
-        engine.sprites.add (text);
-        welcome=new Welcome (ref engine);
+        //engine.sprites.add (text);
+		option= new Option(ref engine);
+        engine.sprites.add (option);
+        help= new Help(ref engine);
+        engine.sprites.add (help);
+        start= new Start(ref engine);
+        engine.sprites.add (start);
+		welcome= new Welcome(ref engine);
         engine.sprites.add (welcome);
 		over= new GameOver (ref engine);
         
@@ -72,11 +81,13 @@ public class GameDemo : Object {
 			// some event fired !
 			// First init show welcome screen
 			// no selection at moment
-			if (welcome.welcome_done && welcome.activ){
+			if (start.welcome_done && start.activ){
 			engine.sprites.remove (welcome);
-			welcome.welcome_done=false;
-			welcome.activ=false;
-			engine.sprites.remove (text);
+			start.welcome_done=false;
+			start.activ=false;
+			engine.sprites.remove (help);
+			engine.sprites.remove (option);
+			engine.sprites.remove (start);
 			//StatusDisplay
 			fuel=new Fuel (ref engine);
 			engine.sprites.add (fuel); 
