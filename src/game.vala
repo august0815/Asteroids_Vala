@@ -154,45 +154,34 @@ public class GameDemo : Object {
 					//print_index();
 					// Umrechnung zwischen Grad und Radiant
 					var r = ((ship.richtung + 90) * 3.14) / 180;
-					//bombe ++;
-					//text.bombe=bombe;
-					//text.update();
 					laser.velocity_x = Math.cos (r)*35;
 					laser.velocity_y = Math.sin (r)*35;
 					laser.x = ship.x;
 					laser.y = ship.y;
 					laser.rotation=ship.rotation;
 					laser.activ = true;
-					//print("LASER fires\n");
 					engine.sprites.add (laser);
 					item_index = engine.sprites.index_of (laser);
 					laser.index=item_index;
-					//print_index();
 					engine.sounds[3].play ();
 				}
 			}
 			
 			
 			if (ship.dead  && !exp.activ && ship.was_hit) {
-				
-				//print_index();
-				//print ("Ship died\n");
 				engine.sounds[2].play ();
 				 exp.activ=true;
 				lifes++;
 				life.update_life(lifes);
-				//text.update();
 				ship.pause = true;
 				exp.x = ship.x;
 				exp.y = ship.y;
 				var index = engine.sprites.index_of (ship);
 				exp.index=index;
 				engine.sprites.set (index,exp);
-					//print_index();
 				exp.animation_start(0, 15, 60);
 					engine.add_timer(() => {
 					ship.fired=false;
-					//print("Animation Ends"+"\n");
 					exp.activ=false;
 					exp.animation_stop();
 					ship.x = engine.width/2;
@@ -211,12 +200,15 @@ public class GameDemo : Object {
 				reiter_shild.shild=ship.shild;
 				
 				engine.sounds[4].play ();
-				ship.pause = true;
-				ship_was_hit.x = ship.x;
-				ship_was_hit.y = ship.y;
-				var index = engine.sprites.index_of (ship);
-				ship_was_hit.index=index;
-				engine.sprites.set (index,ship_was_hit);
+				//ship.pause = true;
+				//ship_was_hit.x = ship.x;
+				//ship_was_hit.y = ship.y;
+				//var index = engine.sprites.index_of (ship);
+				//ship_was_hit.index=index;
+				ship.was_hit = false;//Remove later
+				ship.pause = false;//Remove later
+			/*	still bugs issue #20
+			 * engine.sprites.set (index,ship_was_hit);
 					//print_index();
 				ship_was_hit.animation_start(0, 3, 60);
 					engine.add_timer(() => {
@@ -233,7 +225,7 @@ public class GameDemo : Object {
 					ship.dead=false;
 					//ship.shild=100;
 					ship_was_hit.activ = false;
-					}, 500);
+					}, 500);*/
 				
 				}
 			
