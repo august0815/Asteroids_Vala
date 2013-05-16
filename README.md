@@ -8,17 +8,11 @@ What´s this ?
 
 An test of the darkcore lib . Darkcore uses opengl to display sprite.
 
-The move the 'ship' with arrows , the ship rotates slowly, fire with space.
+The move the 'ship' with arrows ,  fire with space and 'w'.
 
-If you hit all rock´s , the game ends. 
+If you hit all rock´s , the game ends.
 
-Still 2 bugs:
-
-Game Over Text is not displayd!
-
-Crashs sometimes when ship is hit by rock.(Must rewrite detection )
-
-Missing animation( of explosion etc ..).
+Game has 4 level . 
 
 
 
@@ -33,7 +27,17 @@ rock.png and ship.png are form : http://www.cs.oberlin.edu/~wexler/cs261Fall09/l
 
 bomb.png is an old sprite i don´t know where from.
 
-Sound : from http://www.freesound.org/
-see Readme at resources
+Sound : from http://www.freesound.org/ 
+-------------------------------------
+With small mods i used these files:
 
+bomb_launch.ogg is __http://www.freesound.org/people/EcoDTR/sounds/36847/__
+
+explosin.ogg is __http://www.freesound.org/people/ryansnook/sounds/110115/__
+
+hit.ogg is __http://www.freesound.org/people/smcameron/sounds/51464/__
+
+laser.ogg is __http://www.freesound.org/people/bubaproducer/sounds/151022/__
+
+ship_explode is __http://www.freesound.org/people/NoiseCollector/sounds/6722/__
 
